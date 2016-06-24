@@ -1,5 +1,3 @@
-"use strict";
-
 var Paddle,
     Ball,
     UI;
@@ -32,6 +30,8 @@ var BLX = BLX || {
 
     init: function (canvas, canvasWidth, canvasHeight, ctx) {
 
+        "use strict";
+
         this.canvasObject = canvas;
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
@@ -62,11 +62,13 @@ BLX.Canvas = {
 
     clearCanvas: function () {
 
+        "use strict";
         BLX.ctx.clearRect(0, 0, BLX.canvasWidth, BLX.canvasHeight);
     },
 
     paintCanvas: function () {
 
+        "use strict";
         BLX.Canvas.clearCanvas();
         BLX.ball.draw(BLX.ctx);
         BLX.paddle.draw(BLX.ctx);
@@ -77,6 +79,7 @@ BLX.Loop = {
 
     runLoop: function () {
 
+        "use strict";
         BLX.Canvas.paintCanvas();
         BLX.paddle.updatePosition(BLX.canvasWidth);
         BLX.ball.startNextMove(BLX.canvasWidth, BLX.canvasHeight, BLX.paddle);
@@ -97,8 +100,9 @@ BLX.Loop = {
 
     startLoop: function () {
 
-        console.log('STARTING');
+        "use strict";
         setTimeout(function () {
+
             BLX.isLoopRunning = true;
             BLX.loopID = requestAnimationFrame(BLX.Loop.runLoop);
         }, 1000);
@@ -106,9 +110,9 @@ BLX.Loop = {
 
     stopLoop: function () {
 
+        "use strict";
         BLX.isRunning = false;
         cancelAnimationFrame(BLX.loopID);
-        console.log('STOPPED');
     }
 };
 
@@ -116,6 +120,7 @@ BLX.Handler = {
 
     keyDownHandler: function (e) {
 
+        "use strict";
         if (e.keyCode === 39) {
 
             BLX.paddle.rightArrowPressed = true;
@@ -128,6 +133,7 @@ BLX.Handler = {
 
     keyUpHandler: function (e) {
 
+        "use strict";
         if (e.keyCode === 39) {
 
             BLX.paddle.rightArrowPressed = false;
@@ -140,6 +146,8 @@ BLX.Handler = {
 
     mouseMoveHandler: function (e) {
 
+        "use strict";
+
         var relativeX = e.clientX - BLX.canvasObject.offsetLeft;
 
         if (relativeX > 0 && relativeX < BLX.canvasWidth) {
@@ -149,3 +157,46 @@ BLX.Handler = {
     }
 
 };
+
+BLX.Game = {
+
+    looseLife: function () {
+
+        "use strict";
+
+        BLX.Loop.stopLoop();
+        BLX.lives -= 1;
+
+        if (BLX.lives < 1) {
+
+            BLX.Game.gameOver();
+
+        } else {
+
+            BLX.ball.reset(BLX.ballSpeed);
+            BLX.paddle.reset(BLX.paddleSpeed, BLX.paddleWidth);
+            BLX.Canvas.paintCanvas();
+            BLX.Loop.startLoop();
+
+        }
+
+    },
+
+    gameOver: function () {
+
+        "use strict";
+
+        console.log("Sorry - Game Over");
+
+    },
+
+    clearLevel: function () {
+
+        "use strict";
+
+        console.log("Level cleared");
+
+    }
+
+};
+

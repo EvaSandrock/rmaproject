@@ -1,7 +1,8 @@
 /*jslint bitwise: true */
-"use strict";
 
 function Ball() {
+
+    "use strict";
 
     var initialX,
         initialY,
@@ -10,17 +11,29 @@ function Ball() {
         radius,
         speed,
         nextPositionX,
-        nextPositionY;
-
-    this.xDirectionPositive = true;
-    this.yDirectionPositive = false;
+        nextPositionY,
+        xDirectionPositive,
+        yDirectionPositive;
 
     return this;
 }
 
 Ball.prototype = {
 
+    resetDirections: function () {
+
+        "use strict";
+
+        this.xDirectionPositive = true;
+        this.yDirectionPositive = false;
+
+    },
+
     init: function (x, y, radius, speed) {
+
+        "use strict";
+
+        this.resetDirections();
 
         this.initialX = x;
         this.initialY = y;
@@ -33,6 +46,8 @@ Ball.prototype = {
 
     draw: function (ctx) {
 
+        "use strict";
+
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = '#fff';
@@ -44,12 +59,16 @@ Ball.prototype = {
 
     startNextMove: function (canvasWidth, canvasHeight, paddle) {
 
+        "use strict";
+
         this.checkBorderCollision(canvasWidth);
         this.checkPaddleCollision(canvasHeight, paddle);
         this.updateNextPosition();
     },
 
     checkBorderCollision: function (canvasWidth) {
+
+        "use strict";
 
         var rightEdge = canvasWidth - this.radius;
 
@@ -68,6 +87,8 @@ Ball.prototype = {
     },
 
     checkPaddleCollision: function (canvasHeight, paddle) {
+
+        "use strict";
 
         var bottomEdge = canvasHeight - paddle.height - this.radius,
             paddleLeft = paddle.x - this.radius,
@@ -89,19 +110,21 @@ Ball.prototype = {
 
     checkDroppedBall: function (canvasHeight, paddle) {
 
+        "use strict";
+
         var bottomEdge = canvasHeight - paddle.height - this.radius;
 
         if (this.nextPositionY > bottomEdge && !this.checkPaddleCollision) {
 
             return true;
-
-        } else {
-
-            return false;
         }
+
+        return false;
     },
 
     setBallToNextPosition: function () {
+
+        "use strict";
 
         this.x = this.nextPositionX;
         this.y = this.nextPositionY;
@@ -109,15 +132,19 @@ Ball.prototype = {
 
     reset: function (speed) {
 
+        "use strict";
+
         this.x = this.initialX;
         this.y = this.initialY;
         this.speed = speed;
-        this.xDirectionPositive = true;
-        this.yDirectionPositive = false;
+        this.resetDirections();
         this.updateNextPosition();
+        this.setBallToNextPosition();
     },
 
     updateNextPosition: function () {
+
+        "use strict";
 
         if (this.xDirectionPositive) {
             this.nextPositionX = this.x + this.speed;
