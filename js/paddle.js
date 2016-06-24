@@ -26,8 +26,8 @@ Paddle.prototype = {
         this.height = height;
         this.initialX = x;
         this.initialY = y;
-        this.x = x;
-        this.y = y;
+        this.x = this.initialX;
+        this.y = this.initialY;
         this.speed = speed;
 
     },

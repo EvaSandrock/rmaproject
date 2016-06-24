@@ -13,7 +13,10 @@ function Ball() {
         nextPositionX,
         nextPositionY,
         xDirectionPositive,
-        yDirectionPositive;
+        yDirectionPositive,
+        bottomEdge,
+        rightEdge,
+        paddleCollision = false;
 
     return this;
 }
@@ -23,31 +26,29 @@ Ball.prototype = {
     resetDirections: function () {
 
         "use strict";
-
         this.xDirectionPositive = true;
         this.yDirectionPositive = false;
 
     },
 
-    init: function (x, y, radius, speed) {
+    init: function (radius, speed, bottomEdge, rightEdge) {
 
         "use strict";
-
         this.resetDirections();
-
-        this.initialX = x;
-        this.initialY = y;
-        this.x = x;
-        this.y = y;
+        this.initialX = rightEdge / 2;
+        this.initialY = bottomEdge - radius;
+        this.x = this.initialX;
+        this.y = this.initialY;
         this.radius = radius;
         this.speed = speed;
+        this.bottomEdge = bottomEdge;
+        this.rightEdge = rightEdge - this.radius;
 
     },
 
     draw: function (ctx) {
 
         "use strict";
-
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = '#fff';
@@ -57,75 +58,59 @@ Ball.prototype = {
 
     },
 
-    startNextMove: function (canvasWidth, canvasHeight, paddle) {
+    startNextMove: function (paddle) {
 
         "use strict";
-
-        this.checkBorderCollision(canvasWidth);
-        this.checkPaddleCollision(canvasHeight, paddle);
+        this.checkBorderCollision();
+        this.updateNextPosition();
+        this.checkPaddleCollision(paddle);
         this.updateNextPosition();
     },
 
-    checkBorderCollision: function (canvasWidth) {
+    checkBorderCollision: function () {
 
         "use strict";
-
-        var rightEdge = canvasWidth - this.radius;
-
-        if (this.nextPositionX < this.radius || this.nextPositionX > rightEdge) {
-
+        if (this.nextPositionX < this.radius || this.nextPositionX > this.rightEdge) {
             this.xDirectionPositive ^= true;
-            this.updateNextPosition();
         }
 
         if (this.nextPositionY < this.radius) {
-
             this.yDirectionPositive ^= true;
-            this.updateNextPosition();
         }
 
     },
 
-    checkPaddleCollision: function (canvasHeight, paddle) {
+    checkPaddleCollision: function (paddle) {
 
         "use strict";
+        var paddleLeft = paddle.x - this.radius * 0.3,
+            paddleRight = paddle.x + paddle.width + this.radius * 0.3;
 
-        var bottomEdge = canvasHeight - paddle.height - this.radius,
-            paddleLeft = paddle.x - this.radius,
-            paddleRight = paddle.x + paddle.width - this.radius;
-
-        if (this.nextPositionY > bottomEdge) {
+        if (this.nextPositionY > this.bottomEdge - this.radius) {
 
             if (this.nextPositionX > paddleLeft && this.nextPositionX < paddleRight) {
 
+                this.paddleCollision = true;
                 this.yDirectionPositive ^= true;
                 this.updateNextPosition();
-                return true;
             }
+        } else {
+            this.paddleCollision = false;
         }
-
-        this.updateNextPosition();
-        return false;
     },
 
-    checkDroppedBall: function (canvasHeight, paddle) {
+    checkDroppedBall: function () {
 
         "use strict";
-
-        var bottomEdge = canvasHeight - paddle.height - this.radius;
-
-        if (this.nextPositionY > bottomEdge && !this.checkPaddleCollision) {
-
+        if (this.nextPositionY > this.bottomEdge && !this.paddleCollision) {
             return true;
         }
-
         return false;
     },
 
     setBallToNextPosition: function () {
 
         "use strict";
-
         this.x = this.nextPositionX;
         this.y = this.nextPositionY;
     },
@@ -133,7 +118,6 @@ Ball.prototype = {
     reset: function (speed) {
 
         "use strict";
-
         this.x = this.initialX;
         this.y = this.initialY;
         this.speed = speed;
@@ -145,7 +129,6 @@ Ball.prototype = {
     updateNextPosition: function () {
 
         "use strict";
-
         if (this.xDirectionPositive) {
             this.nextPositionX = this.x + this.speed;
         } else {

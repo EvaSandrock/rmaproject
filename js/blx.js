@@ -39,10 +39,10 @@ var BLX = BLX || {
 
         this.ball.init(
 
-            this.canvasWidth / 2,
-            this.canvasHeight - this.ballRadius - this.paddleHeight,
             this.ballRadius,
-            this.ballSpeed
+            this.ballSpeed,
+            this.canvasHeight - this.paddleHeight,
+            this.canvasWidth
         );
 
         this.paddle.init(
@@ -82,14 +82,11 @@ BLX.Loop = {
         "use strict";
         BLX.Canvas.paintCanvas();
         BLX.paddle.updatePosition(BLX.canvasWidth);
-        BLX.ball.startNextMove(BLX.canvasWidth, BLX.canvasHeight, BLX.paddle);
+        BLX.ball.startNextMove(BLX.paddle);
 
-        if (BLX.ball.checkDroppedBall(BLX.canvasHeight, BLX.paddle)) {
-
-            BLX.looseLive();
-
+        if (BLX.ball.checkDroppedBall()) {
+            BLX.Game.looseLive();
         } else {
-
             BLX.ball.setBallToNextPosition();
         }
 
@@ -104,14 +101,14 @@ BLX.Loop = {
         setTimeout(function () {
 
             BLX.isLoopRunning = true;
-            BLX.loopID = requestAnimationFrame(BLX.Loop.runLoop);
+            BLX.Loop.runLoop();
         }, 1000);
     },
 
     stopLoop: function () {
 
         "use strict";
-        BLX.isRunning = false;
+        BLX.isLoopRunning = false;
         cancelAnimationFrame(BLX.loopID);
     }
 };
@@ -160,7 +157,7 @@ BLX.Handler = {
 
 BLX.Game = {
 
-    looseLife: function () {
+    looseLive: function () {
 
         "use strict";
 
@@ -174,8 +171,7 @@ BLX.Game = {
         } else {
 
             BLX.ball.reset(BLX.ballSpeed);
-            BLX.paddle.reset(BLX.paddleSpeed, BLX.paddleWidth);
-            BLX.Canvas.paintCanvas();
+            BLX.paddle.reset(BLX.paddleWidth, BLX.paddleSpeed);
             BLX.Loop.startLoop();
 
         }
