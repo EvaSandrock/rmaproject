@@ -1,24 +1,35 @@
 /*jslint bitwise: true */
 "use strict";
 
-function Ball(x, y, radius, speed) {
+function Ball() {
 
-    this.initialX = x;
-    this.initialY = y;
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.speed = speed;
+    var initialX,
+        initialY,
+        x,
+        y,
+        radius,
+        speed,
+        nextPositionX,
+        nextPositionY;
 
     this.xDirectionPositive = true;
     this.yDirectionPositive = false;
 
-    var nextPositionX,
-        nextPositionY;
-
+    return this;
 }
 
 Ball.prototype = {
+
+    init: function (x, y, radius, speed) {
+
+        this.initialX = x;
+        this.initialY = y;
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.speed = speed;
+
+    },
 
     draw: function (ctx) {
 
@@ -27,18 +38,15 @@ Ball.prototype = {
         ctx.fillStyle = '#fff';
         ctx.fill();
         ctx.closePath();
-
         this.updateNextPosition();
 
     },
 
-    checkCollisions: function (canvasWidth, canvasHeight, paddle) {
+    startNextMove: function (canvasWidth, canvasHeight, paddle) {
 
         this.checkBorderCollision(canvasWidth);
         this.checkPaddleCollision(canvasHeight, paddle);
-
         this.updateNextPosition();
-
     },
 
     checkBorderCollision: function (canvasWidth) {
@@ -46,10 +54,13 @@ Ball.prototype = {
         var rightEdge = canvasWidth - this.radius;
 
         if (this.nextPositionX < this.radius || this.nextPositionX > rightEdge) {
-            this.xDirectionPositive = true ^ false;
+
+            this.xDirectionPositive ^= true;
             this.updateNextPosition();
         }
+
         if (this.nextPositionY < this.radius) {
+
             this.yDirectionPositive ^= true;
             this.updateNextPosition();
         }
@@ -63,7 +74,9 @@ Ball.prototype = {
             paddleRight = paddle.x + paddle.width - this.radius;
 
         if (this.nextPositionY > bottomEdge) {
+
             if (this.nextPositionX > paddleLeft && this.nextPositionX < paddleRight) {
+
                 this.yDirectionPositive ^= true;
                 this.updateNextPosition();
                 return true;
@@ -72,7 +85,6 @@ Ball.prototype = {
 
         this.updateNextPosition();
         return false;
-
     },
 
     checkDroppedBall: function (canvasHeight, paddle) {
@@ -87,14 +99,12 @@ Ball.prototype = {
 
             return false;
         }
-
     },
 
-    setPositionToNextPosition: function () {
+    setBallToNextPosition: function () {
 
         this.x = this.nextPositionX;
         this.y = this.nextPositionY;
-
     },
 
     reset: function (speed) {
@@ -102,12 +112,9 @@ Ball.prototype = {
         this.x = this.initialX;
         this.y = this.initialY;
         this.speed = speed;
-
         this.xDirectionPositive = true;
         this.yDirectionPositive = false;
-
         this.updateNextPosition();
-
     },
 
     updateNextPosition: function () {
@@ -123,7 +130,5 @@ Ball.prototype = {
         } else {
             this.nextPositionY = this.y - this.speed;
         }
-
     }
-
 };

@@ -1,6 +1,18 @@
-var Block = {
+"use strict";
 
-    this.draw = function(ctx, x, y, color) {
+var Block = function () {
+
+    return {
+
+        draw: this.draw
+
+    };
+
+};
+
+Block.prototype = {
+
+    draw: function (ctx, x, y, color) {
 
         ctx.beginPath();
         ctx.rect(x, y, 80, 20);
@@ -8,6 +20,6 @@ var Block = {
         ctx.fill();
         ctx.closePath();
 
-    };
+    }
 
 };

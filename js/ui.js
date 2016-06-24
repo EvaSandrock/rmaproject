@@ -2,13 +2,15 @@
 
 function UI() {
 
-    this.pointsElem = document.getElementById('ui-bar__points').getElementsByTagName('span');
-    this.livesElem = document.getElementById('ui-bar__lives');
+    // this.pointsElem = document.getElementById('ui-bar__points').getElementsByTagName('span');
+    // this.livesElem = document.getElementById('ui-bar__lives');
 
     this.liveIcon = '<i class="fa fa-heart"></i>';
     this.lostLiveIcon = '<i class="fa fa-heart-o"></i>';
 
 }
+
+/*
 
 UI.prototype = {
 
@@ -32,17 +34,19 @@ UI.prototype = {
     alert: {
 
         levelUp: function (level, points) {
-            
-            
+
+
 
         },
 
         gameOver: function (points) {
-            
-            
-            
+
+
+
         }
 
     }
 
 };
+
+*/
