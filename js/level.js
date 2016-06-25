@@ -1,15 +1,15 @@
-var Block;
+var Block,
+    Levels;
 
 var Level = function () {
     "use strict";
 
-    var columns,
-        blockHeight,
-        blockWidth,
-        blockMargin,
-        levelList = [],
-        currentLevel = 0,
-        blocks = [];
+    this.columns = null;
+    this.blockHeight = null;
+    this.blockWidth = null;
+    this.blockMargin = null;
+    this.currentLevel = 0;
+    this.levelList = new Levels();
 
     return this;
 };
@@ -42,20 +42,49 @@ var Level = function () {
         }
     };
 
-    this.setUpBlocks = function () {
+    this.setupBlocks = function () {
+
+        var row, col;
+
         this.blocks = [];
-        var n, i;
-        for (n = 0; n < this.levelList[this.currentLevel].rows; n += 1) {
-            for (i = 0; i < this.columns; i += 1) {
-                this.blocks.push(
-                    new Block(
-                        this.blockWidth,
-                        this.blockHeight,
-                        this.selectBlockDurability(this.random())
-                    )
+
+        for (row = 0; row < this.levelList[this.currentLevel].rows; row += 1) {
+
+            this.blocks[row] = [];
+
+            for (col = 0; col < this.columns; col += 1) {
+
+                this.blocks[row][col] = new Block(
+                    this.getBlockX(col),
+                    this.getBlockY(row),
+                    this.blockWidth,
+                    this.blockHeight,
+                    this.selectBlockDurability(this.random())
                 );
             }
         }
+    };
+
+    this.drawBlocks = function (ctx) {
+
+        var row, col,
+            currentBlock;
+
+        for (row = 0; row < this.levelList[this.currentLevel].rows; row += 1) {
+            for (col = 0; col < this.columns; col += 1) {
+
+                currentBlock = this.blocks[row][col];
+                currentBlock.draw(ctx);
+            }
+        }
+    };
+
+    this.getBlockX = function (col) {
+        return this.blockMargin + col * (this.blockWidth + this.blockMargin);
+    };
+
+    this.getBlockY = function (row) {
+        return this.blockMargin + row * (this.blockHeight + this.blockMargin);
     };
 
     this.setCurrentLevel = function (level) {
@@ -64,45 +93,3 @@ var Level = function () {
 
 
 }.call(Level.prototype));
-
-/*
-
-
-            {
-                rows: 3,
-                durabilities: [
-                    100,
-                    100,
-                    100,
-                    100,
-                    100
-                ],
-                ballSpeed: 3,
-                paddleWidth: 100
-            },
-            {
-                rows: 3,
-                durabilities: [
-                    70,
-                    100,
-                    100,
-                    100,
-                    100
-                ],
-                ballSpeed: 4,
-                paddleWidth: 95
-            },
-            {
-                rows: 4,
-                durabilities: [
-                    50,
-                    80,
-                    100,
-                    100,
-                    100
-                ],
-                ballSpeed: 4,
-                paddleWidth: 90
-            }
-
-*/

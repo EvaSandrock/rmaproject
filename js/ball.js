@@ -48,7 +48,7 @@ var Ball = function () {
 
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = '#263238';
         ctx.fill();
         ctx.closePath();
         this.updateNextPosition();
@@ -77,6 +77,25 @@ var Ball = function () {
 
         var paddleLeft = paddle.x - this.radius * 0.3,
             paddleRight = paddle.x + paddle.width + this.radius * 0.3;
+
+        if (this.nextPositionY > this.bottomEdge - this.radius) {
+
+            if (this.nextPositionX > paddleLeft && this.nextPositionX < paddleRight) {
+
+                this.paddleCollision = true;
+                this.yDirectionPositive ^= true;
+                this.calculateSpeedX(paddleLeft, paddleRight);
+                this.updateNextPosition();
+            }
+        } else {
+            this.paddleCollision = false;
+        }
+    };
+
+    this.checkBlockCollision = function (block) {
+
+        var blockLeft = block.x - this.radius,
+            blockRight = paddle.x + paddle.width + this.radius * 0.3;
 
         if (this.nextPositionY > this.bottomEdge - this.radius) {
 

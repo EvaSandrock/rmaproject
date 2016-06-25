@@ -19,7 +19,7 @@ var BLX = function () {
     this.blockHeight = 20;
     this.blockWidth = 60;
     this.blockMargin = 6;
-    this.level = 1;
+    this.level = 9;
     this.levelObject = new Level();
 
     this.isLoopRunning = false;
@@ -92,7 +92,7 @@ var BLX = function () {
         );
 
         this.levelObject.setCurrentLevel(this.level);
-        this.levelObject.setUpBlocks();
+        this.levelObject.setupBlocks();
     };
 
 }.call(BLX.prototype));
@@ -107,6 +107,7 @@ var BLX = function () {
 
     this.paintCanvas = function () {
         BLX.clearCanvas();
+        BLX.levelObject.drawBlocks(BLX.ctx);
         BLX.ball.draw(BLX.ctx);
         BLX.paddle.draw(BLX.ctx);
     };
