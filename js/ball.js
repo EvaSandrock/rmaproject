@@ -9,6 +9,7 @@ function Ball() {
         y,
         radius,
         speed,
+        speedX,
         nextPositionX,
         nextPositionY,
         xDirectionPositive,
@@ -38,6 +39,7 @@ Ball.prototype = {
         this.y = this.initialY;
         this.radius = radius;
         this.speed = speed;
+        this.speedX = this.speed;
         this.bottomEdge = bottomEdge;
         this.rightEdge = rightEdge - this.radius;
 
@@ -83,6 +85,7 @@ Ball.prototype = {
 
                 this.paddleCollision = true;
                 this.yDirectionPositive ^= true;
+                this.calculateSpeedX(paddleLeft, paddleRight);
                 this.updateNextPosition();
             }
         } else {
@@ -104,11 +107,21 @@ Ball.prototype = {
         this.y = this.nextPositionY;
     },
 
+    calculateSpeedX: function (paddleLeft, paddleRight) {
+        "use strict";
+        var half = (paddleRight - paddleLeft) / 2,
+            center = paddleLeft + half,
+            distance = (this.nextPositionX - center);
+        this.speedX = this.speed * (distance / 20);
+
+    },
+
     reset: function (speed) {
         "use strict";
         this.x = this.initialX;
         this.y = this.initialY;
         this.speed = speed;
+        this.speedX = this.speed;
         this.resetDirections();
         this.updateNextPosition();
         this.setBallToNextPosition();
@@ -117,9 +130,9 @@ Ball.prototype = {
     updateNextPosition: function () {
         "use strict";
         if (this.xDirectionPositive) {
-            this.nextPositionX = this.x + this.speed;
+            this.nextPositionX = this.x + this.speedX;
         } else {
-            this.nextPositionX = this.x - this.speed;
+            this.nextPositionX = this.x - this.speedX;
         }
 
         if (this.yDirectionPositive) {
