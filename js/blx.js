@@ -3,7 +3,6 @@ var Ball,
     UI;
 
 var BLX = function () {
-
     "use strict";
 
     this.canvasObject = null;
@@ -36,7 +35,6 @@ var BLX = function () {
 
 // SETUP FUNCTIONS
 (function () {
-
     "use strict";
 
     this.setupCanvas = function (canvas, canvasWidth, canvasHeight, ctx) {
@@ -84,7 +82,6 @@ var BLX = function () {
 
 // CANVAS FUNCTIONS
 (function () {
-
     "use strict";
 
     this.clearCanvas = function () {
@@ -101,7 +98,6 @@ var BLX = function () {
 
 // LOOP FUNCTIONS
 (function () {
-
     "use strict";
 
     this.runLoop = function () {
@@ -145,7 +141,6 @@ var BLX = function () {
 
 // EVENT HANDLER FUNCTIONS
 (function () {
-
     "use strict";
 
     this.keyDownHandler = function (e) {
@@ -176,7 +171,6 @@ var BLX = function () {
 
 // GAME LOGIC FUNCTIONS
 (function () {
-
     "use strict";
 
     this.liveLost = function () {

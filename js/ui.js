@@ -1,5 +1,4 @@
-function UI() {
-
+var UI = function () {
     "use strict";
 
     var uiLevel,
@@ -10,29 +9,27 @@ function UI() {
 
     return this;
 
-}
+};
 
-UI.prototype = {
+(function () {
+    "use strict";
 
-    init: function (level, points, lives, uiLiveIcon, uiLiveLostIcon) {
-        "use strict";
+    this.init = function (level, points, lives, uiLiveIcon, uiLiveLostIcon) {
         this.uiLevel = level;
         this.uiPoints = points;
         this.uiLives = lives;
         this.iconLive = uiLiveIcon;
         this.iconLostLive = uiLiveLostIcon;
-    },
+    };
 
-    update: function (level, points, lives, maxLives) {
-        "use strict";
-        this.uiLevel.innerText = level;
+    this.update = function (level, points, lives, maxLives) {
+        this.uiLevel.innerText = level + 1;
         this.uiPoints.innerText = points;
         this.clearNode(this.uiLives);
         this.uiLives.innerHTML = this.concatLiveIcons(lives, maxLives);
-    },
+    };
 
-    concatLiveIcons: function (lives, maxLives) {
-        "use strict";
+    this.concatLiveIcons = function (lives, maxLives) {
         var n,
             liveIcons = '';
 
@@ -43,16 +40,16 @@ UI.prototype = {
                 liveIcons += this.iconLostLive;
             }
         }
-
         return liveIcons;
-    },
+    };
 
-    clearNode: function (parentNode) {
-        "use strict";
+    this.clearNode = function (parentNode) {
         while (parentNode.firstChild) {
             parentNode.removeChild(parentNode.firstChild);
         }
-    }
-};
+    };
+
+
+}.call(UI.prototype));
 
 

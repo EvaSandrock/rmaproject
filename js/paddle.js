@@ -1,6 +1,6 @@
-function Paddle() {
-
+var Paddle = function () {
     "use strict";
+
     var width,
         height,
         initialX,
@@ -13,12 +13,12 @@ function Paddle() {
 
     return this;
 
-}
+};
 
-Paddle.prototype = {
+(function () {
+    "use strict";
 
-    init: function (width, height, x, y, speed) {
-        "use strict";
+    this.init = function (width, height, x, y, speed) {
         this.width = width;
         this.height = height;
         this.initialX = x;
@@ -26,31 +26,29 @@ Paddle.prototype = {
         this.x = this.initialX;
         this.y = this.initialY;
         this.speed = speed;
-    },
+    };
 
-    draw: function (ctx) {
-        "use strict";
+    this.draw = function (ctx) {
         ctx.beginPath();
         ctx.rect(this.x, this.y, this.width, this.height);
         ctx.fillStyle = "#000";
         ctx.fill();
         ctx.closePath();
-    },
+    };
 
-    updatePosition: function (canvasWidth) {
-        "use strict";
+    this.updatePosition = function (canvasWidth) {
         if (this.rightArrowPressed && this.x < canvasWidth - this.width) {
             this.x += this.speed;
         } else if (this.leftArrowPressed && this.x > 0) {
             this.x -= this.speed;
         }
-    },
+    };
 
-    reset: function (width, speed) {
-        "use strict";
+    this.reset = function (width, speed) {
         this.width = width;
         this.speed = speed;
         this.x = this.initialX;
         this.y = this.initialY;
-    }
-};
+    };
+
+}.call(Paddle.prototype));

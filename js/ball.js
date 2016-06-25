@@ -22,7 +22,6 @@ var Ball = function () {
 };
 
 (function () {
-
     "use strict";
 
     this.resetDirections = function () {
