@@ -1,6 +1,7 @@
 var Ball,
     Paddle,
-    UI;
+    UI,
+    Level;
 
 var BLX = function () {
     "use strict";
@@ -10,10 +11,16 @@ var BLX = function () {
     this.canvasHeight = null;
     this.ctx = null;
 
-    this.level = 2;
     this.points = 123;
     this.maxLives = 5;
     this.lives = 3;
+
+    this.columns = 9;
+    this.blockHeight = 20;
+    this.blockWidth = 60;
+    this.blockMargin = 6;
+    this.level = 1;
+    this.levelObject = new Level();
 
     this.isLoopRunning = false;
     this.loopID = 0;
@@ -76,6 +83,16 @@ var BLX = function () {
             this.canvasHeight - this.paddleHeight,
             this.paddleSpeed
         );
+
+        this.levelObject.init(
+            this.columns,
+            this.blockHeight,
+            this.blockWidth,
+            this.blockMargin
+        );
+
+        this.levelObject.setCurrentLevel(this.level);
+        this.levelObject.setUpBlocks();
     };
 
 }.call(BLX.prototype));

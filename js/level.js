@@ -6,11 +6,68 @@ var Level = function () {
     var columns,
         blockHeight,
         blockWidth,
-        blockMarginTop,
-        blockMarginRight,
+        blockMargin,
+        levelList = [],
         currentLevel = 0,
+        blocks = [];
 
-        levels = [
+    return this;
+};
+
+(function () {
+    "use strict";
+
+    this.init = function (
+        columns,
+        blockHeight,
+        blockWidth,
+        blockMargin
+    ) {
+        this.columns = columns;
+        this.blockHeight = blockHeight;
+        this.blockWidth = blockWidth;
+        this.blockMargin = blockMargin;
+    };
+
+    this.random = function () {
+        return Math.floor(Math.random() * 100) + 1;
+    };
+
+    this.selectBlockDurability = function (random) {
+        var n;
+        for (n = 0; n < this.levelList[this.currentLevel].durabilities.length; n += 1) {
+            if (random < this.levelList[this.currentLevel].durabilities[n]) {
+                return n;
+            }
+        }
+    };
+
+    this.setUpBlocks = function () {
+        this.blocks = [];
+        var n, i;
+        for (n = 0; n < this.levelList[this.currentLevel].rows; n += 1) {
+            for (i = 0; i < this.columns; i += 1) {
+                this.blocks.push(
+                    new Block(
+                        this.blockWidth,
+                        this.blockHeight,
+                        this.selectBlockDurability(this.random())
+                    )
+                );
+            }
+        }
+    };
+
+    this.setCurrentLevel = function (level) {
+        this.currentLevel = level;
+    };
+
+
+}.call(Level.prototype));
+
+/*
+
+
             {
                 rows: 3,
                 durabilities: [
@@ -47,62 +104,5 @@ var Level = function () {
                 ballSpeed: 4,
                 paddleWidth: 90
             }
-        ],
 
-        blocks = [];
-
-    return this;
-};
-
-(function () {
-    "use strict";
-
-    this.init = function (
-        columns,
-        blockHeight,
-        blockWidth,
-        blockMarginTop,
-        blockMarginRight
-    ) {
-        this.columns = columns;
-        this.blockHeight = blockHeight;
-        this.blockWidth = blockWidth;
-        this.blockMarginTop = blockMarginTop;
-        this.blockMarginRight = blockMarginRight;
-    };
-
-    this.random = function () {
-        return Math.floor(Math.random() * 100) + 1;
-    };
-
-    this.selectBlockDurability = function (random) {
-        var n;
-        for (n = 0; n < this.levels[this.currentLevel].durabilities.length; n += 1) {
-            if (random < this.levels[this.currentLevel].durabilities[n]) {
-                return n;
-            }
-        }
-    };
-
-    this.setUpBlocks = function () {
-        this.blocks = [];
-        var n, i;
-        for (n = 0; n < this.levels[this.currentLevel].rows; n += 1) {
-            for (i = 0; i < this.columns; i += 1) {
-                this.blocks.push(
-                    new Block(
-                        this.blockWidth,
-                        this.blockHeight,
-                        this.selectBlockDurability(this.random())
-                    )
-                );
-            }
-        }
-    };
-
-    this.setCurrentLevel = function (level) {
-        this.currentLevel = level;
-    };
-
-
-}.call(Level.prototype));
+*/
