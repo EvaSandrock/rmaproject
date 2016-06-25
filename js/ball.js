@@ -42,6 +42,7 @@ var Ball = function () {
         this.speedX = this.speed;
         this.bottomEdge = bottomEdge;
         this.rightEdge = rightEdge - this.radius;
+        this.pointsForOneMove = 0;
     };
 
     this.draw = function (ctx) {
@@ -56,6 +57,7 @@ var Ball = function () {
 
     this.startNextMove = function (paddle) {
 
+        this.pointsForOneMove = 0;
         this.checkBorderCollision();
         this.updateNextPosition();
         this.checkPaddleCollision(paddle);
@@ -92,23 +94,44 @@ var Ball = function () {
         }
     };
 
+    this.iterateBlocksForCollisionCheck = function (rows, columns, blocks) {
+
+        var row, col, block;
+
+        for (row = 0; row < rows; row += 1) {
+            for (col = 0; col < columns; col += 1) {
+
+                block = blocks[row][col];
+                if (block.isAlive() && this.checkBlockCollision(block)) {
+                    if (!block.isAlive()) {
+                        this.pointsForOneMove += block.pointsForBlock;
+                    }
+                    this.yDirectionPositive ^= true;
+                    this.updateNextPosition();
+                }
+
+            }
+        }
+    };
+
     this.checkBlockCollision = function (block) {
 
         var blockLeft = block.x - this.radius,
-            blockRight = paddle.x + paddle.width + this.radius * 0.3;
+            blockRight = block.x + block.width + this.radius,
+            blockTop = block.y - this.radius,
+            blockBottom = block.y + block.height + this.radius;
 
-        if (this.nextPositionY > this.bottomEdge - this.radius) {
-
-            if (this.nextPositionX > paddleLeft && this.nextPositionX < paddleRight) {
-
-                this.paddleCollision = true;
-                this.yDirectionPositive ^= true;
-                this.calculateSpeedX(paddleLeft, paddleRight);
-                this.updateNextPosition();
-            }
-        } else {
-            this.paddleCollision = false;
+        if (
+            this.nextPositionX > blockLeft &&
+                this.nextPositionX < blockRight &&
+                this.nextPositionY > blockTop &&
+                this.nextPositionY < blockBottom
+        ) {
+            block.durability -= 1;
+            return true;
         }
+
+        return false;
     };
 
     this.checkDroppedBall = function () {

@@ -40,6 +40,7 @@ var Level = function () {
                 return n;
             }
         }
+        return 0;
     };
 
     this.setupBlocks = function () {
@@ -74,7 +75,9 @@ var Level = function () {
             for (col = 0; col < this.columns; col += 1) {
 
                 currentBlock = this.blocks[row][col];
-                currentBlock.draw(ctx);
+                if (currentBlock.isAlive()) {
+                    currentBlock.draw(ctx);
+                }
             }
         }
     };

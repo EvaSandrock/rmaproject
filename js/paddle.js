@@ -31,7 +31,7 @@ var Paddle = function () {
     this.draw = function (ctx) {
         ctx.beginPath();
         ctx.rect(this.x, this.y, this.width, this.height);
-        ctx.fillStyle = "#000";
+        ctx.fillStyle = "#263238";
         ctx.fill();
         ctx.closePath();
     };

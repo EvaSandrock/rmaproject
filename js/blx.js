@@ -11,7 +11,7 @@ var BLX = function () {
     this.canvasHeight = null;
     this.ctx = null;
 
-    this.points = 123;
+    this.points = 0;
     this.maxLives = 5;
     this.lives = 3;
 
@@ -123,10 +123,21 @@ var BLX = function () {
         BLX.paddle.updatePosition(BLX.canvasWidth);
         BLX.ball.startNextMove(BLX.paddle);
 
+        BLX.ball.iterateBlocksForCollisionCheck(
+            BLX.levelObject.levelList[BLX.level].rows,
+            BLX.columns,
+            BLX.levelObject.blocks
+        );
+
         if (BLX.ball.checkDroppedBall()) {
             BLX.liveLost();
         } else {
             BLX.ball.setBallToNextPosition();
+        }
+
+        if (BLX.ball.pointsForOneMove !== 0) {
+            BLX.points += BLX.ball.pointsForOneMove;
+            BLX.uiHasChanged = true;
         }
 
         if (BLX.uiHasChanged) {

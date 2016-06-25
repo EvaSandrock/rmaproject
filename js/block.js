@@ -6,6 +6,7 @@ var Block = function (x, y, width, height, durability) {
     this.width = width;
     this.height = height;
     this.durability = durability;
+    this.pointsForBlock = this.durability + 1 * this.durability + 1;
 
     return this;
 
@@ -30,8 +31,8 @@ var Block = function (x, y, width, height, durability) {
         ctx.closePath();
     };
 
-    this.wasDestroyed = function () {
-        return this.durability < 0;
+    this.isAlive = function () {
+        return this.durability >= 0;
     };
 
 }.call(Block.prototype));
