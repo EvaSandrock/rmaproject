@@ -29,38 +29,21 @@ var BLX = BLX || {
     uiHasChanged: false,
     ui: new UI(),
 
-    init: function (
-        canvas,
-        canvasWidth,
-        canvasHeight,
-        ctx,
-        uiLevel,
-        uiPoints,
-        uiLives,
-        uiLiveIcon,
-        uiLiveLostIcon
-    ) {
+    init: function () {
+        "use strict";
+        return this;
+    },
+
+    setupCanvas: function (canvas, canvasWidth, canvasHeight, ctx) {
         "use strict";
         this.canvasObject = canvas;
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         this.ctx = ctx;
+    },
 
-        this.ball.init(
-            this.ballRadius,
-            this.ballSpeed,
-            this.canvasHeight - this.paddleHeight,
-            this.canvasWidth
-        );
-
-        this.paddle.init(
-            this.paddleWidth,
-            this.paddleHeight,
-            this.canvasWidth / 2 - this.paddleWidth / 2,
-            this.canvasHeight - this.paddleHeight,
-            this.paddleSpeed
-        );
-
+    setupUI: function (uiLevel, uiPoints, uiLives, uiLiveIcon, uiLiveLostIcon) {
+        "use strict";
         this.ui.init(
             uiLevel,
             uiPoints,
@@ -75,8 +58,24 @@ var BLX = BLX || {
             this.lives,
             this.maxLives
         );
+    },
 
-        return this;
+    setupObjects: function () {
+        "use strict";
+        this.ball.init(
+            this.ballRadius,
+            this.ballSpeed,
+            this.canvasHeight - this.paddleHeight,
+            this.canvasWidth
+        );
+
+        this.paddle.init(
+            this.paddleWidth,
+            this.paddleHeight,
+            this.canvasWidth / 2 - this.paddleWidth / 2,
+            this.canvasHeight - this.paddleHeight,
+            this.paddleSpeed
+        );
     }
 };
 
@@ -108,6 +107,7 @@ BLX.Loop = {
         } else {
             BLX.ball.setBallToNextPosition();
         }
+
         if (BLX.uiHasChanged) {
             BLX.ui.update(
                 BLX.level,
@@ -116,6 +116,7 @@ BLX.Loop = {
                 BLX.maxLives
             );
         }
+
         if (BLX.isLoopRunning) {
             BLX.loopID = requestAnimationFrame(BLX.Loop.runLoop);
         }
