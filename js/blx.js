@@ -103,7 +103,7 @@ BLX.Loop = {
         BLX.ball.startNextMove(BLX.paddle);
 
         if (BLX.ball.checkDroppedBall()) {
-            BLX.Game.looseLive();
+            BLX.Game.liveLost();
         } else {
             BLX.ball.setBallToNextPosition();
         }
@@ -170,7 +170,7 @@ BLX.Handler = {
 
 BLX.Game = {
 
-    looseLive: function () {
+    liveLost: function () {
         "use strict";
         BLX.Loop.stopLoop();
         BLX.lives -= 1;
@@ -190,7 +190,7 @@ BLX.Game = {
         console.log("Sorry - Game Over");
     },
 
-    clearLevel: function () {
+    levelCleared: function () {
         "use strict";
         console.log("Level cleared");
     }
