@@ -1,52 +1,58 @@
-"use strict";
-
 function UI() {
 
-    // this.pointsElem = document.getElementById('ui-bar__points').getElementsByTagName('span');
-    // this.livesElem = document.getElementById('ui-bar__lives');
+    "use strict";
 
-    this.liveIcon = '<i class="fa fa-heart"></i>';
-    this.lostLiveIcon = '<i class="fa fa-heart-o"></i>';
+    var uiLevel,
+        uiPoints,
+        uiLives,
+        iconLive,
+        iconLostLive;
+
+    return this;
 
 }
 
-/*
-
 UI.prototype = {
 
-    update: function (points, maxLives, lives) {
-
-        this.pointsElem.innerHTML = points;
-
-        var n;
-        for (n = 0; n < maxLives; n += 1) {
-
-            if (lives >= n) {
-                this.livesElem.appendChild = this.liveIcon;
-            } else {
-                this.livesElem.appendChild = this.lostLiveIcon;
-            }
-
-        }
-
+    init: function (level, points, lives, uiLiveIcon, uiLiveLostIcon) {
+        "use strict";
+        this.uiLevel = level;
+        this.uiPoints = points;
+        this.uiLives = lives;
+        this.iconLive = uiLiveIcon;
+        this.iconLostLive = uiLiveLostIcon;
     },
 
-    alert: {
+    update: function (level, points, lives, maxLives) {
+        "use strict";
+        this.uiLevel.innerText = level;
+        this.uiPoints.innerText = points;
+        this.clearNode(this.uiLives);
+        this.uiLives.innerHTML = this.concatLiveIcons(lives, maxLives);
+    },
 
-        levelUp: function (level, points) {
+    concatLiveIcons: function (lives, maxLives) {
+        "use strict";
+        var n,
+            liveIcons = '';
 
-
-
-        },
-
-        gameOver: function (points) {
-
-
-
+        for (n = 1; n <= maxLives; n += 1) {
+            if (n <= lives) {
+                liveIcons += this.iconLive;
+            } else {
+                liveIcons += this.iconLostLive;
+            }
         }
 
-    }
+        return liveIcons;
+    },
 
+    clearNode: function (parentNode) {
+        "use strict";
+        while (parentNode.firstChild) {
+            parentNode.removeChild(parentNode.firstChild);
+        }
+    }
 };
 
-*/
+

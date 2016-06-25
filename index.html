@@ -7,22 +7,28 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="style.css" />
     <script src="js/ball.js" ></script>
-    <script src="js/ui.js" ></script>
+    <script src="js/block.js" ></script>
+    <script src="js/level.js" ></script>
     <script src="js/paddle.js" ></script>
+    <script src="js/ui.js" ></script>
     <script src="js/blx.js" ></script>
-
 </head>
 <body>
-    <div class="ui-bar" style="width: 600px">
-        <div class="ui-bar__points" id="ui-bar__points">
-            <i class="fa fa-diamond"></i>
-            <span></span>
-        </div>
+    <div class="ui-bar" style="width: 600px; height: 80px;">
         <div class="ui-bar__title">
-            Block Breaker
+            BLOX
         </div>
-        <div class="ui-bar__lives" id="ui-bar__lives">
+        <div class="ui-bar__details">
+            <div class="ui-bar__lives" id="lives">
+                <i class="fa fa-heart"></i>
+                <i class="fa fa-heart"></i>
+                <i class="fa fa-heart-o"></i>
+            </div>
+            <div class="ui-bar__points">
+                <i class="fa fa-diamond"></i><span id="points">34528</span>
+            </div>
         </div>
+        <div class="ui-bar__level" id="level">3</div>
     </div>
     <canvas id="canvas" width="600" height="600">
     </canvas>
