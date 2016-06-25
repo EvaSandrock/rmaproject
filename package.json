@@ -1,0 +1,23 @@
+{
+    "name": "rmaproject",
+    "version": "0.1.1",
+    "description": "",
+    "main": "Gruntfile.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/EvaSandrock/rmaproject.git"
+    },
+    "author": "Eva Sandrock",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/EvaSandrock/rmaproject/issues"
+    },
+    "homepage": "https://github.com/EvaSandrock/rmaproject#readme",
+    "devDependencies": {
+        "grunt": "~1.0.0",
+        "grunt-contrib-uglify": "~0.5.0"
+    }
+}
