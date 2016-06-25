@@ -2,48 +2,51 @@ var Ball,
     Paddle,
     UI;
 
-var BLX = BLX || {
+var BLX = function () {
 
-    canvasObject: null,
-    canvasWidth: null,
-    canvasHeight: null,
-    ctx: null,
+    "use strict";
 
-    level: 2,
-    points: 123,
-    maxLives: 5,
-    lives: 3,
+    this.canvasObject = null;
+    this.canvasWidth = null;
+    this.canvasHeight = null;
+    this.ctx = null;
 
-    isLoopRunning: false,
-    loopID: 0,
+    this.level = 2;
+    this.points = 123;
+    this.maxLives = 5;
+    this.lives = 3;
 
-    ballRadius: 12,
-    ballSpeed: 5,
-    ball: new Ball(),
+    this.isLoopRunning = false;
+    this.loopID = 0;
 
-    paddleWidth: 80,
-    paddleHeight: 8,
-    paddleSpeed: 7,
-    paddle: new Paddle(),
+    this.ballRadius = 12;
+    this.ballSpeed = 5;
+    this.ball = new Ball();
 
-    uiHasChanged: false,
-    ui: new UI(),
+    this.paddleWidth = 80;
+    this.paddleHeight = 8;
+    this.paddleSpeed = 7;
+    this.paddle = new Paddle();
 
-    init: function () {
-        "use strict";
-        return this;
-    },
+    this.uiHasChanged = false;
+    this.ui = new UI();
 
-    setupCanvas: function (canvas, canvasWidth, canvasHeight, ctx) {
-        "use strict";
+    return this;
+};
+
+// SETUP FUNCTIONS
+(function () {
+
+    "use strict";
+
+    this.setupCanvas = function (canvas, canvasWidth, canvasHeight, ctx) {
         this.canvasObject = canvas;
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         this.ctx = ctx;
-    },
+    };
 
-    setupUI: function (uiLevel, uiPoints, uiLives, uiLiveIcon, uiLiveLostIcon) {
-        "use strict";
+    this.setupUI = function (uiLevel, uiPoints, uiLives, uiLiveIcon, uiLiveLostIcon) {
         this.ui.init(
             uiLevel,
             uiPoints,
@@ -58,10 +61,9 @@ var BLX = BLX || {
             this.lives,
             this.maxLives
         );
-    },
+    };
 
-    setupObjects: function () {
-        "use strict";
+    this.setupObjects = function () {
         this.ball.init(
             this.ballRadius,
             this.ballSpeed,
@@ -76,34 +78,39 @@ var BLX = BLX || {
             this.canvasHeight - this.paddleHeight,
             this.paddleSpeed
         );
-    }
-};
+    };
 
-BLX.Canvas = {
+}.call(BLX.prototype));
 
-    clearCanvas: function () {
-        "use strict";
+// CANVAS FUNCTIONS
+(function () {
+
+    "use strict";
+
+    this.clearCanvas = function () {
         BLX.ctx.clearRect(0, 0, BLX.canvasWidth, BLX.canvasHeight);
-    },
+    };
 
-    paintCanvas: function () {
-        "use strict";
-        BLX.Canvas.clearCanvas();
+    this.paintCanvas = function () {
+        BLX.clearCanvas();
         BLX.ball.draw(BLX.ctx);
         BLX.paddle.draw(BLX.ctx);
-    }
-};
+    };
 
-BLX.Loop = {
+}.call(BLX.prototype));
 
-    runLoop: function () {
-        "use strict";
-        BLX.Canvas.paintCanvas();
+// LOOP FUNCTIONS
+(function () {
+
+    "use strict";
+
+    this.runLoop = function () {
+        BLX.paintCanvas();
         BLX.paddle.updatePosition(BLX.canvasWidth);
         BLX.ball.startNextMove(BLX.paddle);
 
         if (BLX.ball.checkDroppedBall()) {
-            BLX.Game.liveLost();
+            BLX.liveLost();
         } else {
             BLX.ball.setBallToNextPosition();
         }
@@ -118,81 +125,81 @@ BLX.Loop = {
         }
 
         if (BLX.isLoopRunning) {
-            BLX.loopID = requestAnimationFrame(BLX.Loop.runLoop);
+            BLX.loopID = requestAnimationFrame(BLX.runLoop);
         }
-    },
+    };
 
-    startLoop: function () {
-        "use strict";
+    this.startLoop = function () {
         setTimeout(function () {
             BLX.isLoopRunning = true;
-            BLX.Loop.runLoop();
-        }, 1000);
-    },
+            BLX.runLoop();
+        }, 2000);
+    };
 
-    stopLoop: function () {
-        "use strict";
+    this.stopLoop = function () {
         BLX.isLoopRunning = false;
         cancelAnimationFrame(BLX.loopID);
-    }
-};
+    };
 
-BLX.Handler = {
+}.call(BLX.prototype));
 
-    keyDownHandler: function (e) {
-        "use strict";
+// EVENT HANDLER FUNCTIONS
+(function () {
+
+    "use strict";
+
+    this.keyDownHandler = function (e) {
         if (e.keyCode === 39) {
             BLX.paddle.rightArrowPressed = true;
         } else if (e.keyCode === 37) {
             BLX.paddle.leftArrowPressed = true;
         }
-    },
+    };
 
-    keyUpHandler: function (e) {
-        "use strict";
+    this.keyUpHandler = function (e) {
         if (e.keyCode === 39) {
             BLX.paddle.rightArrowPressed = false;
         } else if (e.keyCode === 37) {
             BLX.paddle.leftArrowPressed = false;
         }
-    },
+    };
 
-    mouseMoveHandler: function (e) {
-        "use strict";
+    this.mouseMoveHandler = function (e) {
         var relativeX = e.clientX - BLX.canvasObject.offsetLeft;
 
         if (relativeX > 0 && relativeX < BLX.canvasWidth) {
             BLX.paddle.x = relativeX - BLX.paddle.width / 2;
         }
-    }
+    };
 
-};
+}.call(BLX.prototype));
 
-BLX.Game = {
+// GAME LOGIC FUNCTIONS
+(function () {
 
-    liveLost: function () {
-        "use strict";
-        BLX.Loop.stopLoop();
+    "use strict";
+
+    this.liveLost = function () {
+        BLX.stopLoop();
         BLX.lives -= 1;
         BLX.uiHasChanged = true;
 
         if (BLX.lives < 1) {
-            BLX.Game.gameOver();
+            BLX.gameOver();
         } else {
             BLX.ball.reset(BLX.ballSpeed);
             BLX.paddle.reset(BLX.paddleWidth, BLX.paddleSpeed);
-            BLX.Loop.startLoop();
+            BLX.startLoop();
         }
-    },
+    };
 
-    gameOver: function () {
-        "use strict";
+    this.gameOver = function () {
         console.log("Sorry - Game Over");
-    },
+    };
 
-    levelCleared: function () {
-        "use strict";
+    this.levelCleared = function () {
         console.log("Level cleared");
-    }
-};
+    };
+
+}.call(BLX.prototype));
 

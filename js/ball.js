@@ -1,6 +1,6 @@
 /*jslint bitwise: true */
 
-function Ball() {
+var Ball = function () {
     "use strict";
 
     var initialX,
@@ -19,19 +19,20 @@ function Ball() {
         paddleCollision = false;
 
     return this;
-}
+};
 
-Ball.prototype = {
+(function () {
 
-    resetDirections: function () {
-        "use strict";
+    "use strict";
+
+    this.resetDirections = function () {
+
         this.xDirectionPositive = true;
         this.yDirectionPositive = false;
+    };
 
-    },
+    this.init = function (radius, speed, bottomEdge, rightEdge) {
 
-    init: function (radius, speed, bottomEdge, rightEdge) {
-        "use strict";
         this.resetDirections();
         this.initialX = rightEdge / 2;
         this.initialY = bottomEdge - radius;
@@ -42,29 +43,28 @@ Ball.prototype = {
         this.speedX = this.speed;
         this.bottomEdge = bottomEdge;
         this.rightEdge = rightEdge - this.radius;
+    };
 
-    },
+    this.draw = function (ctx) {
 
-    draw: function (ctx) {
-        "use strict";
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = '#fff';
         ctx.fill();
         ctx.closePath();
         this.updateNextPosition();
-    },
+    };
 
-    startNextMove: function (paddle) {
-        "use strict";
+    this.startNextMove = function (paddle) {
+
         this.checkBorderCollision();
         this.updateNextPosition();
         this.checkPaddleCollision(paddle);
         this.updateNextPosition();
-    },
+    };
 
-    checkBorderCollision: function () {
-        "use strict";
+    this.checkBorderCollision = function () {
+
         if (this.nextPositionX < this.radius || this.nextPositionX > this.rightEdge) {
             this.xDirectionPositive ^= true;
         }
@@ -72,10 +72,10 @@ Ball.prototype = {
         if (this.nextPositionY < this.radius) {
             this.yDirectionPositive ^= true;
         }
-    },
+    };
 
-    checkPaddleCollision: function (paddle) {
-        "use strict";
+    this.checkPaddleCollision = function (paddle) {
+
         var paddleLeft = paddle.x - this.radius * 0.3,
             paddleRight = paddle.x + paddle.width + this.radius * 0.3;
 
@@ -91,33 +91,33 @@ Ball.prototype = {
         } else {
             this.paddleCollision = false;
         }
-    },
+    };
 
-    checkDroppedBall: function () {
-        "use strict";
+    this.checkDroppedBall = function () {
+
         if (this.nextPositionY > this.bottomEdge && !this.paddleCollision) {
             return true;
         }
         return false;
-    },
+    };
 
-    setBallToNextPosition: function () {
-        "use strict";
+    this.setBallToNextPosition = function () {
+
         this.x = this.nextPositionX;
         this.y = this.nextPositionY;
-    },
+    };
 
-    calculateSpeedX: function (paddleLeft, paddleRight) {
-        "use strict";
+    this.calculateSpeedX = function (paddleLeft, paddleRight) {
+
         var half = (paddleRight - paddleLeft) / 2,
             center = paddleLeft + half,
             distance = (this.nextPositionX - center);
         this.speedX = this.speed * (distance / 20);
 
-    },
+    };
 
-    reset: function (speed) {
-        "use strict";
+    this.reset = function (speed) {
+
         this.x = this.initialX;
         this.y = this.initialY;
         this.speed = speed;
@@ -125,10 +125,10 @@ Ball.prototype = {
         this.resetDirections();
         this.updateNextPosition();
         this.setBallToNextPosition();
-    },
+    };
 
-    updateNextPosition: function () {
-        "use strict";
+    this.updateNextPosition = function () {
+
         if (this.xDirectionPositive) {
             this.nextPositionX = this.x + this.speedX;
         } else {
@@ -140,5 +140,6 @@ Ball.prototype = {
         } else {
             this.nextPositionY = this.y - this.speed;
         }
-    }
-};
+    };
+
+}.call(Ball.prototype));

@@ -9,14 +9,14 @@ var uiLevel = document.getElementById('level'),
     uiLiveIcon = '<i class="fa fa-heart"></i>',
     uiLiveLostIcon = '<i class="fa fa-heart-o"></i>';
 
-var BLX = BLX.init();
+var BLX = new BLX();
 
 BLX.setupCanvas(canvas, canvasWidth, canvasHeight, ctx);
 BLX.setupUI(uiLevel, uiPoints, uiLives, uiLiveIcon, uiLiveLostIcon);
 BLX.setupObjects();
 
-window.addEventListener('keydown', BLX.Handler.keyDownHandler, false);
-window.addEventListener('keyup', BLX.Handler.keyUpHandler, false);
-window.addEventListener('mousemove', BLX.Handler.mouseMoveHandler, false);
+window.addEventListener('keydown', BLX.keyDownHandler, false);
+window.addEventListener('keyup', BLX.keyUpHandler, false);
+window.addEventListener('mousemove', BLX.mouseMoveHandler, false);
 
-BLX.Loop.startLoop();
+BLX.startLoop();
