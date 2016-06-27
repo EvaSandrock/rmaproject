@@ -48,6 +48,7 @@ canvas {
 
 .alert-box {
   position: absolute;
+  min-width: 220px;
   padding: 10px;
   background: #263238;
   color: #dbe9ef;
@@ -58,12 +59,12 @@ canvas {
   box-shadow: 1px 1px 16px -4px #263238;
   font-size: 24px;
   text-align: center;
-  border: 5px solid #dbe9ef; }
+  border: 5px solid #E91E63; }
   .alert-box__header {
     font-size: 30px;
     margin: 0 10px; }
   .alert-box__body {
-    margin: 20px 0; }
+    margin: 20px 10px; }
   .alert-box__footer {
     text-align: right; }
     .alert-box__footer button {
@@ -80,24 +81,36 @@ canvas {
         cursor: pointer;
         background-color: #c1134e; }
 
-.pause {
+.pause,
+.countdown {
   position: absolute;
   display: block;
   width: 50px;
   top: 340px;
   left: 50%;
   transform: translateX(-50%); }
-  .pause::before, .pause::after {
-    content: "";
-    display: block;
-    width: 20px;
-    height: 50px;
-    background: #E91E63;
-    box-shadow: 1px 1px 16px -4px #000; }
-  .pause::before {
-    float: left; }
-  .pause::after {
-    float: right; }
+
+.countdown {
+  color: #E91E63;
+  font-size: 60px;
+  line-height: 1;
+  font-weight: 700;
+  box-shadow: 1px 1px 16px -4px #263238; }
+
+.pause::before,
+.pause::after {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 50px;
+  background: #E91E63;
+  box-shadow: 1px 1px 16px -4px #263238; }
+
+.pause::before {
+  float: left; }
+
+.pause::after {
+  float: right; }
 
 .hints {
   margin: 0 auto;

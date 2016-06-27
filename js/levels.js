@@ -12,7 +12,7 @@ var Levels = function () {
                 100,
                 100
             ],
-            ballSpeed: 8,
+            ballSpeed: 4,
             paddleWidth: 100
         },
         {
@@ -25,7 +25,7 @@ var Levels = function () {
                 100,
                 100
             ],
-            ballSpeed: 10,
+            ballSpeed: 5,
             paddleWidth: 95
         },
         {
@@ -38,7 +38,7 @@ var Levels = function () {
                 100,
                 100
             ],
-            ballSpeed: 12,
+            ballSpeed: 6,
             paddleWidth: 90
         },
         {
@@ -51,7 +51,7 @@ var Levels = function () {
                 100,
                 100
             ],
-            ballSpeed: 14,
+            ballSpeed: 7,
             paddleWidth: 90
         },
         {
@@ -64,7 +64,7 @@ var Levels = function () {
                 90,
                 100
             ],
-            ballSpeed: 16,
+            ballSpeed: 8,
             paddleWidth: 85
         },
         {
@@ -77,7 +77,7 @@ var Levels = function () {
                 70,
                 90
             ],
-            ballSpeed: 18,
+            ballSpeed: 9,
             paddleWidth: 85
         },
         {
@@ -90,7 +90,7 @@ var Levels = function () {
                 80,
                 90
             ],
-            ballSpeed: 20,
+            ballSpeed: 10,
             paddleWidth: 80
         },
         {
@@ -103,7 +103,7 @@ var Levels = function () {
                 50,
                 80
             ],
-            ballSpeed: 22,
+            ballSpeed: 11,
             paddleWidth: 80
         },
         {
@@ -116,7 +116,7 @@ var Levels = function () {
                 70,
                 90
             ],
-            ballSpeed: 24,
+            ballSpeed: 12,
             paddleWidth: 75
         },
         {
@@ -129,7 +129,7 @@ var Levels = function () {
                 90,
                 100
             ],
-            ballSpeed: 26,
+            ballSpeed: 13,
             paddleWidth: 60
         }
 

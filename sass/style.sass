@@ -15,7 +15,7 @@ $box-shadow: 1px 1px 16px -4px $color-dark
 
 body
     font-family: 'Roboto Slab', serif
-    
+
 *[hidden]
     display: none !important
 
@@ -63,6 +63,7 @@ canvas
 
 .alert-box
     position: absolute
+    min-width: 220px
     padding: 10px
     background: $color-dark
     color: $color-light
@@ -73,14 +74,14 @@ canvas
     box-shadow: $box-shadow
     font-size: 24px
     text-align: center
-    border: 5px solid $color-light
+    border: 5px solid $color-pink
 
     &__header
         font-size: 30px
         margin: 0 10px
 
     &__body
-        margin: 20px 0
+        margin: 20px 10px
 
     &__footer
         text-align: right
@@ -99,29 +100,37 @@ canvas
             &:hover
                 cursor: pointer
                 background-color: darken($color-pink, 10%)
-            
-.pause
+
+.pause,
+.countdown
     position: absolute
     display: block
     width: 50px
     top: 340px
     left: 50%
     transform: translateX(-50%)
-    
-    &::before,
-    &::after
-        content: ""
-        display: block
-        width: 20px
-        height: 50px
-        background: $color-pink
-        box-shadow: 1px 1px 16px -4px #000
-    
-    &::before
-        float: left
-    &::after
-        float: right
-    
+
+.countdown
+    color: $color-pink
+    font-size: 60px
+    line-height: 1
+    font-weight: 700
+    box-shadow: $box-shadow
+
+.pause::before,
+.pause::after
+    content: ""
+    display: block
+    width: 20px
+    height: 50px
+    background: $color-pink
+    box-shadow: $box-shadow
+
+.pause::before
+    float: left
+.pause::after
+    float: right
+
 .hints
     margin: 0 auto
     color: lighten($color-dark, 40%)
