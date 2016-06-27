@@ -8,8 +8,10 @@ var Level = function () {
     this.blockHeight = null;
     this.blockWidth = null;
     this.blockMargin = null;
+    this.canvasPadding = null;
     this.currentLevel = 0;
     this.levelList = new Levels();
+    this.blocksInLevel = 0;
 
     return this;
 };
@@ -21,12 +23,14 @@ var Level = function () {
         columns,
         blockHeight,
         blockWidth,
-        blockMargin
+        blockMargin,
+        canvasPadding
     ) {
         this.columns = columns;
         this.blockHeight = blockHeight;
         this.blockWidth = blockWidth;
         this.blockMargin = blockMargin;
+        this.canvasPadding = canvasPadding;
     };
 
     this.random = function () {
@@ -48,6 +52,7 @@ var Level = function () {
         var row, col;
 
         this.blocks = [];
+        this.blocksInLevel = 0;
 
         for (row = 0; row < this.levelList[this.currentLevel].rows; row += 1) {
 
@@ -70,12 +75,16 @@ var Level = function () {
 
         var row, col,
             currentBlock;
+        
+        this.blocksInLevel = 0;
 
         for (row = 0; row < this.levelList[this.currentLevel].rows; row += 1) {
             for (col = 0; col < this.columns; col += 1) {
 
                 currentBlock = this.blocks[row][col];
                 if (currentBlock.isAlive()) {
+                    this.blocksInLevel += 1;
+                    console.log(this.blocksInLevel);
                     currentBlock.draw(ctx);
                 }
             }
@@ -83,11 +92,11 @@ var Level = function () {
     };
 
     this.getBlockX = function (col) {
-        return this.blockMargin + col * (this.blockWidth + this.blockMargin);
+        return this.canvasPadding + this.blockMargin + col * (this.blockWidth + this.blockMargin);
     };
 
     this.getBlockY = function (row) {
-        return this.blockMargin + row * (this.blockHeight + this.blockMargin);
+        return this.canvasPadding / 2 + this.blockMargin + row * (this.blockHeight + this.blockMargin);
     };
 
     this.setCurrentLevel = function (level) {

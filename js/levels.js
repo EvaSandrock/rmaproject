@@ -12,7 +12,7 @@ var Levels = function () {
                 100,
                 100
             ],
-            ballSpeed: 3,
+            ballSpeed: 8,
             paddleWidth: 100
         },
         {
@@ -25,7 +25,7 @@ var Levels = function () {
                 100,
                 100
             ],
-            ballSpeed: 4,
+            ballSpeed: 10,
             paddleWidth: 95
         },
         {
@@ -38,7 +38,7 @@ var Levels = function () {
                 100,
                 100
             ],
-            ballSpeed: 4,
+            ballSpeed: 12,
             paddleWidth: 90
         },
         {
@@ -51,7 +51,7 @@ var Levels = function () {
                 100,
                 100
             ],
-            ballSpeed: 5,
+            ballSpeed: 14,
             paddleWidth: 90
         },
         {
@@ -64,7 +64,7 @@ var Levels = function () {
                 90,
                 100
             ],
-            ballSpeed: 5,
+            ballSpeed: 16,
             paddleWidth: 85
         },
         {
@@ -77,7 +77,7 @@ var Levels = function () {
                 70,
                 90
             ],
-            ballSpeed: 7,
+            ballSpeed: 18,
             paddleWidth: 85
         },
         {
@@ -90,7 +90,7 @@ var Levels = function () {
                 80,
                 90
             ],
-            ballSpeed: 9,
+            ballSpeed: 20,
             paddleWidth: 80
         },
         {
@@ -103,7 +103,7 @@ var Levels = function () {
                 50,
                 80
             ],
-            ballSpeed: 9,
+            ballSpeed: 22,
             paddleWidth: 80
         },
         {
@@ -116,7 +116,7 @@ var Levels = function () {
                 70,
                 90
             ],
-            ballSpeed: 10,
+            ballSpeed: 24,
             paddleWidth: 75
         },
         {
@@ -129,7 +129,7 @@ var Levels = function () {
                 90,
                 100
             ],
-            ballSpeed: 12,
+            ballSpeed: 26,
             paddleWidth: 60
         }
 

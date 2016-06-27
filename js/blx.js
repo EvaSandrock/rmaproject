@@ -13,15 +13,18 @@ var BLX = function () {
 
     this.points = 0;
     this.maxLives = 5;
-    this.lives = 3;
+    this.initialLives = 3;
+    this.lives = this.initialLives;
 
-    this.columns = 9;
-    this.blockHeight = 20;
-    this.blockWidth = 60;
+    this.columns = 10;
+    this.blockHeight = 30;
+    this.blockWidth = 40;
     this.blockMargin = 6;
-    this.level = 9;
+    this.canvasPadding = 73;
+    this.level = 0;
     this.levelObject = new Level();
 
+    this.isGameActive = false;
     this.isLoopRunning = false;
     this.loopID = 0;
 
@@ -33,6 +36,10 @@ var BLX = function () {
     this.paddleHeight = 8;
     this.paddleSpeed = 7;
     this.paddle = new Paddle();
+    
+    this.domGamePaused = null;
+    this.domLevelCleared = null;
+    this.domGameOver = null;
 
     this.uiHasChanged = false;
     this.ui = new UI();
@@ -50,15 +57,15 @@ var BLX = function () {
         this.canvasHeight = canvasHeight;
         this.ctx = ctx;
     };
+    
+    this.setUpAlerts = function (gamePaused, levelCleared, gameOver) {
+        this.domGamePaused = gamePaused;
+        this.domLevelCleared = levelCleared;
+        this.domGameOver = gameOver;
+    };
 
     this.setupUI = function (uiLevel, uiPoints, uiLives, uiLiveIcon, uiLiveLostIcon) {
-        this.ui.init(
-            uiLevel,
-            uiPoints,
-            uiLives,
-            uiLiveIcon,
-            uiLiveLostIcon
-        );
+        this.ui.init(uiLevel, uiPoints, uiLives, uiLiveIcon, uiLiveLostIcon, this.domGamePaused, this.domLevelCleared, this.domGameOver);
 
         this.ui.update(
             this.level,
@@ -69,30 +76,32 @@ var BLX = function () {
     };
 
     this.setupObjects = function () {
+        
+        this.levelObject.init(
+            this.columns,
+            this.blockHeight,
+            this.blockWidth,
+            this.blockMargin,
+            this.canvasPadding
+        );
+
+        this.levelObject.setCurrentLevel(this.level);
+        this.levelObject.setupBlocks();
+        
         this.ball.init(
             this.ballRadius,
-            this.ballSpeed,
+            this.levelObject.levelList[this.levelObject.currentLevel].ballSpeed,
             this.canvasHeight - this.paddleHeight,
             this.canvasWidth
         );
 
         this.paddle.init(
-            this.paddleWidth,
+            this.levelObject.levelList[this.levelObject.currentLevel].paddleWidth,
             this.paddleHeight,
-            this.canvasWidth / 2 - this.paddleWidth / 2,
+            this.canvasWidth / 2 - this.levelObject.levelList[this.levelObject.currentLevel].paddleWidth / 2,
             this.canvasHeight - this.paddleHeight,
             this.paddleSpeed
         );
-
-        this.levelObject.init(
-            this.columns,
-            this.blockHeight,
-            this.blockWidth,
-            this.blockMargin
-        );
-
-        this.levelObject.setCurrentLevel(this.level);
-        this.levelObject.setupBlocks();
     };
 
 }.call(BLX.prototype));
@@ -124,7 +133,7 @@ var BLX = function () {
         BLX.ball.startNextMove(BLX.paddle);
 
         BLX.ball.iterateBlocksForCollisionCheck(
-            BLX.levelObject.levelList[BLX.level].rows,
+            BLX.levelObject.levelList[BLX.levelObject.currentLevel].rows,
             BLX.columns,
             BLX.levelObject.blocks
         );
@@ -149,6 +158,11 @@ var BLX = function () {
             );
         }
 
+        if (BLX.levelObject.blocksInLevel === 0) {
+            BLX.stopLoop();
+            BLX.levelCleared();
+        }
+
         if (BLX.isLoopRunning) {
             BLX.loopID = requestAnimationFrame(BLX.runLoop);
         }
@@ -156,6 +170,7 @@ var BLX = function () {
 
     this.startLoop = function () {
         setTimeout(function () {
+            BLX.isGameActive = true;
             BLX.isLoopRunning = true;
             BLX.runLoop();
         }, 2000);
@@ -171,6 +186,19 @@ var BLX = function () {
 // EVENT HANDLER FUNCTIONS
 (function () {
     "use strict";
+    
+    this.keyPressHandler = function (e) {
+        if (e.keyCode === 32) {
+            if (BLX.isLoopRunning) {
+                BLX.ui.pauseGame(true);
+                BLX.isLoopRunning = false;
+            } else if (BLX.isGameActive) {
+                BLX.ui.pauseGame(false);
+                BLX.isLoopRunning = true;
+                BLX.runLoop();
+            }
+        }
+    };
 
     this.keyDownHandler = function (e) {
         if (e.keyCode === 39) {
@@ -192,7 +220,7 @@ var BLX = function () {
         var relativeX = e.clientX - BLX.canvasObject.offsetLeft;
 
         if (relativeX > 0 && relativeX < BLX.canvasWidth) {
-            BLX.paddle.x = relativeX - BLX.paddle.width / 2;
+            BLX.paddle.x = relativeX - BLX.levelObject.levelList[BLX.levelObject.currentLevel].paddleWidth / 2;
         }
     };
 
@@ -210,18 +238,41 @@ var BLX = function () {
         if (BLX.lives < 1) {
             BLX.gameOver();
         } else {
-            BLX.ball.reset(BLX.ballSpeed);
-            BLX.paddle.reset(BLX.paddleWidth, BLX.paddleSpeed);
+            BLX.ball.reset(BLX.levelObject.levelList[BLX.levelObject.currentLevel].ballSpeed);
+            BLX.paddle.reset(BLX.levelObject.levelList[BLX.levelObject.currentLevel].paddleWidth, BLX.paddleSpeed);
             BLX.startLoop();
         }
     };
 
     this.gameOver = function () {
-        console.log("Sorry - Game Over");
+        BLX.isGameActive = false;
+        BLX.ui.showGameOver(true);
+        BLX.currentLevel = 0;
+        BLX.lives = BLX.initialLives;
     };
 
     this.levelCleared = function () {
-        console.log("Level cleared");
+        BLX.isGameActive = false;
+        BLX.ui.showLevelCleared(true);
+    };
+    
+    this.goToNextLevel = function () {
+        BLX.currentLevel += 1;
+        if (BLX.currentLevel < BLX.levelObject.levelList.length - 1) {
+            BLX.startLevel();
+        } else {
+            BLX.currentLevel = 0;
+        }
+    };
+    
+    this.startLevel = function () {
+        BLX.levelObject.setCurrentLevel(BLX.currentLevel);
+        BLX.levelObject.setupBlocks();
+        BLX.ball.reset(BLX.levelObject.levelList[BLX.levelObject.currentLevel].ballSpeed);
+        BLX.paddle.reset(BLX.levelObject.levelList[BLX.levelObject.currentLevel].paddleWidth, BLX.paddleSpeed);
+        BLX.ui.showLevelCleared(false);
+        BLX.ui.showGameOver(false);
+        BLX.startLoop();
     };
 
 }.call(BLX.prototype));

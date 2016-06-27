@@ -14,12 +14,15 @@ var UI = function () {
 (function () {
     "use strict";
 
-    this.init = function (level, points, lives, uiLiveIcon, uiLiveLostIcon) {
+    this.init = function (level, points, lives, uiLiveIcon, uiLiveLostIcon, domGamePaused, domLevelCleared, domGameOver) {
         this.uiLevel = level;
         this.uiPoints = points;
         this.uiLives = lives;
         this.iconLive = uiLiveIcon;
         this.iconLostLive = uiLiveLostIcon;
+        this.domGamePaused = domGamePaused;
+        this.domLevelCleared = domLevelCleared;
+        this.domGameOver = domGameOver;
     };
 
     this.update = function (level, points, lives, maxLives) {
@@ -46,6 +49,30 @@ var UI = function () {
     this.clearNode = function (parentNode) {
         while (parentNode.firstChild) {
             parentNode.removeChild(parentNode.firstChild);
+        }
+    };
+    
+    this.pauseGame = function (pause) {
+        if (pause) {
+            this.domGamePaused.removeAttribute('hidden', null);
+        } else {
+            this.domGamePaused.setAttribute('hidden', 'hidden');
+        }
+    };
+    
+    this.showLevelCleared = function (show) {
+        if (show) {
+            this.domLevelCleared.removeAttribute('hidden', null);
+        } else {
+            this.domLevelCleared.setAttribute('hidden', 'hidden');
+        }
+    };
+    
+    this.showGameOver = function (show) {
+        if (show) {
+            this.domGameOver.removeAttribute('hidden', null);
+        } else {
+            this.domGameOver.setAttribute('hidden', 'hidden');
         }
     };
 
