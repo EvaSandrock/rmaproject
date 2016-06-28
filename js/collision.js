@@ -8,19 +8,21 @@ var Collision = function () {
 (function () {
     "use strict";
 
-    this.init = function (rightEdge, bottomEdge, paddle, level, ball) {
+    this.init = function (rightEdge, bottomEdge, paddle, level, ball, sound) {
 
         this.rightEdge = rightEdge;
         this.bottomEdge = bottomEdge;
         this.paddle = paddle;
         this.level = level;
         this.ball = ball;
+        this.sound = sound;
         this.ball.paddleCollision = false;
     };
 
     this.checkDroppedBall = function () {
 
         if (this.ballHitsBottomEdge() && !this.ball.paddleCollision) {
+            this.sound.playDroppedBallSound();
             return true;
         }
         return false;
@@ -29,9 +31,11 @@ var Collision = function () {
     this.checkBorderCollision = function () {
 
         if (this.ballHitsWall()) {
+            this.sound.playWallSound();
             this.ball.xDirectionPositive ^= true;
         }
         if (this.ballHitsCeiling()) {
+            this.sound.playWallSound();
             this.ball.yDirectionPositive ^= true;
         }
     };
@@ -39,6 +43,7 @@ var Collision = function () {
     this.checkPaddleCollision = function () {
 
         if (this.ballHitsBottomEdge() && this.ballHitsPaddle()) {
+            this.sound.playPaddleSound();
             this.turnBallAround();
             this.ball.paddleCollision = true;
         } else {
@@ -114,6 +119,7 @@ var Collision = function () {
                 this.ball.nextPositionY > blockTop &&
                 this.ball.nextPositionY < blockBottom
         ) {
+            this.sound.playBlockSound(block.durability);
             block.durability -= 1;
             return true;
         }

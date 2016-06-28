@@ -2,7 +2,8 @@ var Ball,
     Paddle,
     UI,
     Level,
-    Collision;
+    Collision,
+    Sound;
 
 var BLX = function () {
     "use strict";
@@ -39,6 +40,8 @@ var BLX = function () {
     this.count = 3;
     this.countdownInterval = null;
 
+    this.sound = new Sound();
+
     return this;
 };
 
@@ -62,12 +65,7 @@ var BLX = function () {
     };
 
     this.setupUI = function () {
-        this.ui.update(
-            this.level.currentLevel,
-            this.points,
-            this.lives,
-            this.maxLives
-        );
+        BLX.updateUI();
     };
 
     this.setupObjects = function () {
@@ -100,10 +98,11 @@ var BLX = function () {
 
         this.collision.init(
             this.canvasWidth - this.ball.radius,
-            this.canvasHeight - this.paddle.height,
+            this.canvasHeight, // - this.paddle.height,
             this.paddle,
             this.level,
-            this.ball
+            this.ball,
+            this.sound
         );
     };
 
@@ -122,6 +121,15 @@ var BLX = function () {
         BLX.level.drawBlocks(BLX.ctx);
         BLX.ball.draw(BLX.ctx);
         BLX.paddle.draw(BLX.ctx);
+    };
+
+    this.updateUI = function () {
+        BLX.ui.update(
+            BLX.level.currentLevel,
+            BLX.points,
+            BLX.lives,
+            BLX.maxLives
+        );
     };
 
 }.call(BLX.prototype));
@@ -161,12 +169,7 @@ var BLX = function () {
         }
 
         if (BLX.uiHasChanged) {
-            BLX.ui.update(
-                BLX.level.currentLevel,
-                BLX.points,
-                BLX.lives,
-                BLX.maxLives
-            );
+            BLX.updateUI();
         }
 
         if (BLX.level.blocksInLevel === 0) {
@@ -246,7 +249,7 @@ var BLX = function () {
     this.liveLost = function () {
         BLX.stopLoop();
         BLX.lives -= 1;
-        BLX.uiHasChanged = true;
+        BLX.updateUI();
 
         if (BLX.lives < 1) {
             BLX.gameOver();
@@ -283,12 +286,7 @@ var BLX = function () {
         BLX.ball.reset(BLX.level.levelList[BLX.level.currentLevel].ballSpeed);
         BLX.paddle.reset(BLX.level.levelList[BLX.level.currentLevel].paddleWidth, BLX.paddleSpeed);
         BLX.paintCanvas();
-        BLX.ui.update(
-            BLX.level.currentLevel,
-            BLX.points,
-            BLX.lives,
-            BLX.maxLives
-        );
+        BLX.updateUI();
         BLX.ui.showLevelCleared(false);
         BLX.ui.showGameOver(false);
         BLX.countdown();

@@ -4,7 +4,7 @@ var Block,
 var Level = function () {
     "use strict";
 
-    this.currentLevel = 0;
+    this.currentLevel = 8;
     this.levelList = new Levels();
     this.blocksInLevel = 0;
 

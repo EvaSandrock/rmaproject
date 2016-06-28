@@ -38,7 +38,7 @@ var Levels = function () {
                 100,
                 100
             ],
-            ballSpeed: 6,
+            ballSpeed: 5,
             paddleWidth: 90
         },
         {
@@ -51,7 +51,7 @@ var Levels = function () {
                 100,
                 100
             ],
-            ballSpeed: 7,
+            ballSpeed: 6,
             paddleWidth: 90
         },
         {
@@ -64,7 +64,7 @@ var Levels = function () {
                 90,
                 100
             ],
-            ballSpeed: 8,
+            ballSpeed: 6,
             paddleWidth: 85
         },
         {
@@ -77,7 +77,7 @@ var Levels = function () {
                 70,
                 90
             ],
-            ballSpeed: 9,
+            ballSpeed: 5,
             paddleWidth: 85
         },
         {
@@ -90,7 +90,7 @@ var Levels = function () {
                 80,
                 90
             ],
-            ballSpeed: 10,
+            ballSpeed: 5,
             paddleWidth: 80
         },
         {
@@ -103,7 +103,7 @@ var Levels = function () {
                 50,
                 80
             ],
-            ballSpeed: 11,
+            ballSpeed: 4,
             paddleWidth: 80
         },
         {
@@ -116,7 +116,7 @@ var Levels = function () {
                 70,
                 90
             ],
-            ballSpeed: 12,
+            ballSpeed: 4,
             paddleWidth: 75
         },
         {
@@ -129,7 +129,7 @@ var Levels = function () {
                 90,
                 100
             ],
-            ballSpeed: 13,
+            ballSpeed: 4,
             paddleWidth: 60
         }
 
