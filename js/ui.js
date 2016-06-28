@@ -26,7 +26,6 @@ var UI = function () {
     this.update = function (level, points, lives, maxLives) {
         this.domLevel.innerText = level + 1;
         this.domPoints.innerText = points;
-        this.clearNode(this.domLives);
         this.domLives.innerHTML = this.concatLiveIcons(lives, maxLives);
     };
 
@@ -42,12 +41,6 @@ var UI = function () {
             }
         }
         return liveIcons;
-    };
-
-    this.clearNode = function (parentNode) {
-        while (parentNode.firstChild) {
-            parentNode.removeChild(parentNode.firstChild);
-        }
     };
 
     this.pauseGame = function (pause) {
@@ -76,13 +69,21 @@ var UI = function () {
     };
 
     this.showCountdown = function (count) {
-        if (count === 0) {
+        if (count <= 0) {
             this.domCountdown.setAttribute('hidden', 'hidden');
         } else {
             this.domCountdown.innerText = count;
             this.domCountdown.removeAttribute('hidden', null);
         }
     };
+
+    /*
+    this.clearNode = function (parentNode) {
+        while (parentNode.firstChild) {
+            parentNode.removeChild(parentNode.firstChild);
+        }
+    };
+    */
 
 
 }.call(UI.prototype));

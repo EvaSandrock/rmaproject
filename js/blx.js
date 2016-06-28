@@ -37,6 +37,7 @@ var BLX = function () {
     this.uiHasChanged = false;
     this.ui = new UI();
     this.count = 3;
+    this.countdownInterval = null;
 
     return this;
 };
@@ -129,7 +130,18 @@ var BLX = function () {
 (function () {
     "use strict";
 
-    this.runLoop = function () {
+    this.runLoop = function (timestamp) {
+
+        var thisLoop = timestamp;
+
+        if (!BLX.lastLoop) {
+            BLX.ball.frameSpeed = 1;
+        } else {
+            BLX.ball.frameSpeed = (thisLoop - BLX.lastLoop) / 16;
+        }
+
+        BLX.lastLoop = thisLoop;
+        // console.log('Fps: ' + Math.round(60 / BLX.ball.frameSpeed));
         BLX.paintCanvas();
         BLX.paddle.updatePosition(BLX.canvasWidth);
         BLX.ball.startNextMove(BLX.paddle);
@@ -138,6 +150,7 @@ var BLX = function () {
 
         if (BLX.collision.checkDroppedBall()) {
             BLX.liveLost();
+            return;
         } else {
             BLX.ball.setBallToNextPosition();
         }
@@ -159,6 +172,7 @@ var BLX = function () {
         if (BLX.level.blocksInLevel === 0) {
             BLX.stopLoop();
             BLX.levelCleared();
+            return;
         }
 
         if (BLX.isLoopRunning) {
@@ -169,10 +183,12 @@ var BLX = function () {
     this.startLoop = function () {
         BLX.isGameActive = true;
         BLX.isLoopRunning = true;
-        BLX.runLoop();
+        BLX.loopID = requestAnimationFrame(BLX.runLoop);
     };
 
     this.stopLoop = function () {
+        BLX.count = 3;
+        BLX.lastLoop = null;
         BLX.isLoopRunning = false;
         cancelAnimationFrame(BLX.loopID);
     };
@@ -185,13 +201,14 @@ var BLX = function () {
 
     this.keyPressHandler = function (e) {
         if (e.keyCode === 32) {
-            if (BLX.isLoopRunning) {
-                BLX.ui.pauseGame(true);
-                BLX.isLoopRunning = false;
-            } else if (BLX.isGameActive) {
-                BLX.ui.pauseGame(false);
-                BLX.isLoopRunning = true;
-                BLX.runLoop();
+            if (BLX.isGameActive) {
+                if (BLX.isLoopRunning) {
+                    BLX.ui.pauseGame(true);
+                    BLX.stopLoop();
+                } else {
+                    BLX.ui.pauseGame(false);
+                    BLX.startLoop();
+                }
             }
         }
     };
@@ -236,7 +253,8 @@ var BLX = function () {
         } else {
             BLX.ball.reset(BLX.level.levelList[BLX.level.currentLevel].ballSpeed);
             BLX.paddle.reset(BLX.level.levelList[BLX.level.currentLevel].paddleWidth, BLX.paddleSpeed);
-            BLX.startLoop();
+            BLX.paintCanvas();
+            BLX.countdown();
         }
     };
 
@@ -244,7 +262,6 @@ var BLX = function () {
         BLX.isGameActive = false;
         BLX.ui.showGameOver(true);
         BLX.level.currentLevel = 0;
-        BLX.lives = BLX.initialLives;
     };
 
     this.levelCleared = function () {
@@ -266,22 +283,33 @@ var BLX = function () {
         BLX.ball.reset(BLX.level.levelList[BLX.level.currentLevel].ballSpeed);
         BLX.paddle.reset(BLX.level.levelList[BLX.level.currentLevel].paddleWidth, BLX.paddleSpeed);
         BLX.paintCanvas();
+        BLX.ui.update(
+            BLX.level.currentLevel,
+            BLX.points,
+            BLX.lives,
+            BLX.maxLives
+        );
         BLX.ui.showLevelCleared(false);
         BLX.ui.showGameOver(false);
         BLX.countdown();
     };
 
     this.countdown = function () {
-        setTimeout(function () {
-            BLX.ui.showCountdown(BLX.count);
-            BLX.count -= 1;
-            if (BLX.count < 0) {
-                BLX.startLoop();
-                BLX.count = 3;
-            } else {
-                BLX.countdown();
-            }
+        BLX.isGameActive = false;
+        BLX.countdownInterval = setInterval(function () {
+            BLX.showCountdown();
         }, 1000);
+    };
+
+    this.showCountdown = function () {
+        BLX.ui.showCountdown(BLX.count);
+        if (BLX.count <= 0) {
+            clearInterval(BLX.countdownInterval);
+            BLX.startLoop();
+            return;
+        } else {
+            BLX.count -= 1;
+        }
     };
 
 }.call(BLX.prototype));

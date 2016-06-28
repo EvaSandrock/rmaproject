@@ -40,6 +40,7 @@ var Ball = function () {
 
     this.startNextMove = function (paddle) {
 
+        this.paddleCollision = false;
         this.pointsForOneMove = 0;
         this.collisionChecker.checkBorderCollision();
         this.updateNextPosition();
@@ -57,36 +58,44 @@ var Ball = function () {
 
         var half = (paddleRight - paddleLeft) / 2,
             center = paddleLeft + half,
-            distance = (this.nextPositionX - center);
-        this.speedX = this.speed * (1 + distance / 100);
-        if ((this.nextPositionX < center && this.speedX > 0) || (this.nextPositionX > center && this.speedX < 0)) {
-            this.speedX *= -1;
+            distance = Math.abs(this.nextPositionX - center);
+        
+        this.speedX = (this.speed * 2) * (distance / half);
+        
+        if (this.ballHitsPaddleLeft(center)) {
+            this.xDirectionPositive = false;
+        } else {
+            this.xDirectionPositive = true;
         }
+    };
+    
+    this.ballHitsPaddleLeft = function (paddleCenter) {
+        return this.nextPositionX < paddleCenter;
     };
 
     this.reset = function (speed) {
 
+        this.frameSpeed = 1;
         this.x = this.initialX;
         this.y = this.initialY;
         this.speed = speed;
         this.speedX = this.speed;
         this.resetDirections();
         this.updateNextPosition();
-        this.setBallToNextPosition();
     };
 
     this.updateNextPosition = function () {
 
         if (this.xDirectionPositive) {
-            this.nextPositionX = this.x + this.speedX;
+            this.nextPositionX = this.x + this.speedX * this.frameSpeed;
         } else {
-            this.nextPositionX = this.x - this.speedX;
+            this.nextPositionX = this.x - this.speedX * this.frameSpeed;
         }
 
         if (this.yDirectionPositive) {
-            this.nextPositionY = this.y + this.speed;
+            this.nextPositionY = this.y + this.speed * this.frameSpeed;
         } else {
-            this.nextPositionY = this.y - this.speed;
+            this.nextPositionY = this.y - this.speed * this.frameSpeed;
         }
     };
 

@@ -2,7 +2,6 @@
 
 var Collision = function () {
     "use strict";
-    this.paddleCollision = false;
     return this;
 };
 
@@ -16,11 +15,12 @@ var Collision = function () {
         this.paddle = paddle;
         this.level = level;
         this.ball = ball;
+        this.ball.paddleCollision = false;
     };
 
     this.checkDroppedBall = function () {
 
-        if (this.ballHitsBottomEdge() && !this.paddleCollision) {
+        if (this.ballHitsBottomEdge() && !this.ball.paddleCollision) {
             return true;
         }
         return false;
@@ -40,9 +40,9 @@ var Collision = function () {
 
         if (this.ballHitsBottomEdge() && this.ballHitsPaddle()) {
             this.turnBallAround();
-            this.paddleCollision = true;
+            this.ball.paddleCollision = true;
         } else {
-            this.paddleCollision = false;
+            this.ball.paddleCollision = false;
         }
     };
 

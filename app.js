@@ -30,6 +30,8 @@ function nextLevel(e) {
 
 function newGame(e) {
     "use strict";
+    BLX.lives = BLX.initialLives;
+    BLX.points = 0;
     BLX.startLevel();
 }
 
@@ -38,4 +40,5 @@ window.addEventListener('keyup', BLX.keyUpHandler, false);
 window.addEventListener('keypress', BLX.keyPressHandler, false);
 window.addEventListener('mousemove', BLX.mouseMoveHandler, false);
 
+BLX.paintCanvas();
 BLX.countdown();
