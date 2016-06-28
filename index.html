@@ -12,10 +12,12 @@
     <script src="js/levels.js" ></script>
     <script src="js/paddle.js" ></script>
     <script src="js/ui.js" ></script>
+    <script src="js/collision.js" ></script>
     <script src="js/blx.js" ></script>
 </head>
 <body>
     <div class="pause" id="gamePaused" hidden ></div>
+    <div class="countdown" id="countdown" hidden >3</div>
     <div class="alert-box" id="levelCleared" hidden >
         <div class="alert-box__header">Congratulations!</div>
         <div class="alert-box__body">Level <span id="clearedLevel">1</span> cleared</div>
@@ -23,7 +25,7 @@
     </div>
     <div class="alert-box" id="gameOver" hidden >
         <div class="alert-box__header">Sorry!</div>
-        <div class="alert-box__body">Game over - no lives left.</div>
+        <div class="alert-box__body">Game over<br>no lives left.</div>
         <div class="alert-box__footer"><button id="newGame" onclick="newGame()">New game</button></div>
     </div>
     <div class="ui-bar" style="width: 600px; height: 80px;">

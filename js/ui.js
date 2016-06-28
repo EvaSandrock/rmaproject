@@ -1,12 +1,5 @@
 var UI = function () {
     "use strict";
-
-    var uiLevel,
-        uiPoints,
-        uiLives,
-        iconLive,
-        iconLostLive;
-
     return this;
 
 };
@@ -14,22 +7,27 @@ var UI = function () {
 (function () {
     "use strict";
 
-    this.init = function (level, points, lives, uiLiveIcon, uiLiveLostIcon, domGamePaused, domLevelCleared, domGameOver) {
-        this.uiLevel = level;
-        this.uiPoints = points;
-        this.uiLives = lives;
+    this.setupUIBar = function (level, points, lives, uiLiveIcon, uiLiveLostIcon) {
+        this.domLevel = level;
+        this.domPoints = points;
+        this.domLives = lives;
         this.iconLive = uiLiveIcon;
         this.iconLostLive = uiLiveLostIcon;
+    };
+
+    this.setupAlerts = function (domGamePaused, domLevelCleared, domClearedLevel, domGameOver, countdown) {
         this.domGamePaused = domGamePaused;
         this.domLevelCleared = domLevelCleared;
+        this.domClearedLevel = domClearedLevel;
         this.domGameOver = domGameOver;
+        this.domCountdown = countdown;
     };
 
     this.update = function (level, points, lives, maxLives) {
-        this.uiLevel.innerText = level + 1;
-        this.uiPoints.innerText = points;
-        this.clearNode(this.uiLives);
-        this.uiLives.innerHTML = this.concatLiveIcons(lives, maxLives);
+        this.domLevel.innerText = level + 1;
+        this.domPoints.innerText = points;
+        this.clearNode(this.domLives);
+        this.domLives.innerHTML = this.concatLiveIcons(lives, maxLives);
     };
 
     this.concatLiveIcons = function (lives, maxLives) {
@@ -51,7 +49,7 @@ var UI = function () {
             parentNode.removeChild(parentNode.firstChild);
         }
     };
-    
+
     this.pauseGame = function (pause) {
         if (pause) {
             this.domGamePaused.removeAttribute('hidden', null);
@@ -59,20 +57,30 @@ var UI = function () {
             this.domGamePaused.setAttribute('hidden', 'hidden');
         }
     };
-    
-    this.showLevelCleared = function (show) {
+
+    this.showLevelCleared = function (show, level) {
         if (show) {
+            this.domClearedLevel.innerText = level + 1;
             this.domLevelCleared.removeAttribute('hidden', null);
         } else {
             this.domLevelCleared.setAttribute('hidden', 'hidden');
         }
     };
-    
+
     this.showGameOver = function (show) {
         if (show) {
             this.domGameOver.removeAttribute('hidden', null);
         } else {
             this.domGameOver.setAttribute('hidden', 'hidden');
+        }
+    };
+
+    this.showCountdown = function (count) {
+        if (count === 0) {
+            this.domCountdown.setAttribute('hidden', 'hidden');
+        } else {
+            this.domCountdown.innerText = count;
+            this.domCountdown.removeAttribute('hidden', null);
         }
     };
 

@@ -1,23 +1,5 @@
-/*jslint bitwise: true */
-
 var Ball = function () {
     "use strict";
-
-    var initialX,
-        initialY,
-        x,
-        y,
-        radius,
-        speed,
-        speedX,
-        nextPositionX,
-        nextPositionY,
-        xDirectionPositive,
-        yDirectionPositive,
-        bottomEdge,
-        rightEdge,
-        paddleCollision = false;
-
     return this;
 };
 
@@ -30,7 +12,7 @@ var Ball = function () {
         this.yDirectionPositive = false;
     };
 
-    this.init = function (radius, speed, bottomEdge, rightEdge) {
+    this.init = function (radius, speed, bottomEdge, rightEdge, collision) {
 
         this.resetDirections();
         this.initialX = rightEdge / 2;
@@ -43,6 +25,7 @@ var Ball = function () {
         this.bottomEdge = bottomEdge;
         this.rightEdge = rightEdge - this.radius;
         this.pointsForOneMove = 0;
+        this.collisionChecker = collision;
     };
 
     this.draw = function (ctx) {
@@ -58,88 +41,10 @@ var Ball = function () {
     this.startNextMove = function (paddle) {
 
         this.pointsForOneMove = 0;
-        this.checkBorderCollision();
+        this.collisionChecker.checkBorderCollision();
         this.updateNextPosition();
-        this.checkPaddleCollision(paddle);
+        this.collisionChecker.checkPaddleCollision();
         this.updateNextPosition();
-    };
-
-    this.checkBorderCollision = function () {
-
-        if (this.nextPositionX < this.radius || this.nextPositionX > this.rightEdge) {
-            this.xDirectionPositive ^= true;
-        }
-
-        if (this.nextPositionY < this.radius) {
-            this.yDirectionPositive ^= true;
-        }
-    };
-
-    this.checkPaddleCollision = function (paddle) {
-
-        var paddleLeft = paddle.x - this.radius * 0.3,
-            paddleRight = paddle.x + paddle.width + this.radius * 0.3;
-
-        if (this.nextPositionY > this.bottomEdge - this.radius) {
-
-            if (this.nextPositionX > paddleLeft && this.nextPositionX < paddleRight) {
-
-                this.paddleCollision = true;
-                this.yDirectionPositive ^= true;
-                this.calculateSpeedX(paddleLeft, paddleRight);
-                this.updateNextPosition();
-            }
-        } else {
-            this.paddleCollision = false;
-        }
-    };
-
-    this.iterateBlocksForCollisionCheck = function (rows, columns, blocks) {
-
-        var row, col, block;
-
-        for (row = 0; row < rows; row += 1) {
-            for (col = 0; col < columns; col += 1) {
-
-                block = blocks[row][col];
-                if (block.isAlive() && this.checkBlockCollision(block)) {
-                    if (!block.isAlive()) {
-                        this.pointsForOneMove += block.pointsForBlock;
-                    }
-                    this.yDirectionPositive ^= true;
-                    this.updateNextPosition();
-                }
-
-            }
-        }
-    };
-
-    this.checkBlockCollision = function (block) {
-
-        var blockLeft = block.x - this.radius,
-            blockRight = block.x + block.width + this.radius,
-            blockTop = block.y - this.radius,
-            blockBottom = block.y + block.height + this.radius;
-
-        if (
-            this.nextPositionX > blockLeft &&
-                this.nextPositionX < blockRight &&
-                this.nextPositionY > blockTop &&
-                this.nextPositionY < blockBottom
-        ) {
-            block.durability -= 1;
-            return true;
-        }
-
-        return false;
-    };
-
-    this.checkDroppedBall = function () {
-
-        if (this.nextPositionY > this.bottomEdge && !this.paddleCollision) {
-            return true;
-        }
-        return false;
     };
 
     this.setBallToNextPosition = function () {
@@ -153,8 +58,10 @@ var Ball = function () {
         var half = (paddleRight - paddleLeft) / 2,
             center = paddleLeft + half,
             distance = (this.nextPositionX - center);
-        this.speedX = this.speed * (distance / 20);
-
+        this.speedX = this.speed * (1 + distance / 100);
+        if ((this.nextPositionX < center && this.speedX > 0) || (this.nextPositionX > center && this.speedX < 0)) {
+            this.speedX *= -1;
+        }
     };
 
     this.reset = function (speed) {

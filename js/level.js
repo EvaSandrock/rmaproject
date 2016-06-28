@@ -4,11 +4,6 @@ var Block,
 var Level = function () {
     "use strict";
 
-    this.columns = null;
-    this.blockHeight = null;
-    this.blockWidth = null;
-    this.blockMargin = null;
-    this.canvasPadding = null;
     this.currentLevel = 0;
     this.levelList = new Levels();
     this.blocksInLevel = 0;
@@ -74,18 +69,17 @@ var Level = function () {
     this.drawBlocks = function (ctx) {
 
         var row, col,
-            currentBlock;
-        
+            block;
+
         this.blocksInLevel = 0;
 
         for (row = 0; row < this.levelList[this.currentLevel].rows; row += 1) {
             for (col = 0; col < this.columns; col += 1) {
 
-                currentBlock = this.blocks[row][col];
-                if (currentBlock.isAlive()) {
+                block = this.blocks[row][col];
+                if (block.isAlive()) {
                     this.blocksInLevel += 1;
-                    console.log(this.blocksInLevel);
-                    currentBlock.draw(ctx);
+                    block.draw(ctx);
                 }
             }
         }
@@ -97,10 +91,6 @@ var Level = function () {
 
     this.getBlockY = function (row) {
         return this.canvasPadding / 2 + this.blockMargin + row * (this.blockHeight + this.blockMargin);
-    };
-
-    this.setCurrentLevel = function (level) {
-        this.currentLevel = level;
     };
 
 

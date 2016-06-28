@@ -5,7 +5,9 @@ var canvas = document.getElementById('canvas'),
 
 var gamePaused = document.getElementById('gamePaused'),
     levelCleared = document.getElementById('levelCleared'),
-    gameOver = document.getElementById('gameOver');
+    clearedLevel = document.getElementById('clearedLevel'),
+    gameOver = document.getElementById('gameOver'),
+    countdown = document.getElementById('countdown');
 
 var uiLevel = document.getElementById('level'),
     uiLives = document.getElementById('lives'),
@@ -16,8 +18,9 @@ var uiLevel = document.getElementById('level'),
 var BLX = new BLX();
 
 BLX.setupCanvas(canvas, canvasWidth, canvasHeight, ctx);
-BLX.setUpAlerts(gamePaused, levelCleared, gameOver);
-BLX.setupUI(uiLevel, uiPoints, uiLives, uiLiveIcon, uiLiveLostIcon);
+BLX.setupAlerts(gamePaused, levelCleared, clearedLevel, gameOver, countdown);
+BLX.setupUIBar(uiLevel, uiPoints, uiLives, uiLiveIcon, uiLiveLostIcon);
+BLX.setupUI();
 BLX.setupObjects();
 
 function nextLevel(e) {
@@ -35,4 +38,4 @@ window.addEventListener('keyup', BLX.keyUpHandler, false);
 window.addEventListener('keypress', BLX.keyPressHandler, false);
 window.addEventListener('mousemove', BLX.mouseMoveHandler, false);
 
-BLX.startLoop();
+BLX.countdown();

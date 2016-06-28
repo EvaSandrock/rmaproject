@@ -1,15 +1,8 @@
 var Paddle = function () {
     "use strict";
 
-    var width,
-        height,
-        initialX,
-        initialY,
-        x,
-        y,
-        speed,
-        rightArrowPressed = false,
-        leftArrowPressed = false;
+    this.rightArrowPressed = false;
+    this.leftArrowPressed = false;
 
     return this;
 

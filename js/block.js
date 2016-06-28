@@ -6,10 +6,9 @@ var Block = function (x, y, width, height, durability) {
     this.width = width;
     this.height = height;
     this.durability = durability;
-    this.pointsForBlock = this.durability + 1 * this.durability + 1;
+    this.pointsForBlock = (this.durability + 1) * (this.durability + 1);
 
     return this;
-
 };
 
 (function () {
