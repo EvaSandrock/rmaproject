@@ -16,18 +16,11 @@ canvas {
   margin: 0 auto; }
 
 #canvas {
-  background: -webkit-linear-gradient(#e9f4f9 0%, #cbdbe2 100%);
   background: linear-gradient(#e9f4f9 0%, #cbdbe2 100%); }
 
 .ui-bar {
   margin: 0 auto;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
   align-items: center;
   padding: 10px 15px;
   font-size: 58px;
@@ -40,18 +33,8 @@ canvas {
   .ui-bar__details {
     font-size: 20px;
     height: 50px;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
     flex-direction: column;
-    -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
-    -ms-flex-pack: justify;
     justify-content: space-between; }
     .ui-bar__details .fa {
       margin-right: 5px; }
@@ -71,7 +54,6 @@ canvas {
   color: #dbe9ef;
   border-radius: 16px;
   left: 50%;
-  -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
   top: 240px;
   box-shadow: 1px 1px 16px -4px #263238;
@@ -108,7 +90,6 @@ canvas {
   width: 50px;
   top: 340px;
   left: 50%;
-  -webkit-transform: translateX(-50%);
   transform: translateX(-50%); }
 
 .countdown {
@@ -134,5 +115,22 @@ canvas {
   float: right; }
 
 .hints {
-  margin: 0 auto;
-  color: #819ca9; }
+  margin: 10px auto 0;
+  color: #9fb4be;
+  font-size: 12px; }
+  .hints ul {
+    margin: 0 0 0 5px;
+    padding: 0;
+    list-style-type: circle;
+    list-style-position: inside; }
+  .hints li {
+    margin-bottom: 5px; }
+  .hints a {
+    color: inherit;
+    text-decoration: none;
+    display: inline-block;
+    border-bottom: 1px dotted currentColor; }
+    .hints a:hover {
+      border-bottom-color: transparent; }
+
+/*# sourceMappingURL=style.css.map */
