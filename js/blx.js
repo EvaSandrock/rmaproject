@@ -36,6 +36,7 @@ var BLX = function () {
 
     this.uiHasChanged = false;
     this.ui = new UI();
+    this.count = 3;
 
     return this;
 };
@@ -51,8 +52,8 @@ var BLX = function () {
         this.ctx = ctx;
     };
 
-    this.setupAlerts = function (gamePaused, levelCleared, gameOver, countdown) {
-        this.ui.setupAlerts(gamePaused, levelCleared, gameOver, countdown);
+    this.setupAlerts = function (gamePaused, levelCleared, clearedLevel, gameOver, countdown) {
+        this.ui.setupAlerts(gamePaused, levelCleared, clearedLevel, gameOver, countdown);
     };
 
     this.setupUIBar = function (uiLevel, uiPoints, uiLives, uiLiveIcon, uiLiveLostIcon) {
@@ -248,7 +249,7 @@ var BLX = function () {
 
     this.levelCleared = function () {
         BLX.isGameActive = false;
-        BLX.ui.showLevelCleared(true);
+        BLX.ui.showLevelCleared(true, BLX.level.currentLevel);
     };
 
     this.goToNextLevel = function () {
@@ -264,24 +265,21 @@ var BLX = function () {
         BLX.level.setupBlocks();
         BLX.ball.reset(BLX.level.levelList[BLX.level.currentLevel].ballSpeed);
         BLX.paddle.reset(BLX.level.levelList[BLX.level.currentLevel].paddleWidth, BLX.paddleSpeed);
+        BLX.paintCanvas();
         BLX.ui.showLevelCleared(false);
         BLX.ui.showGameOver(false);
-        BLX.startLoop();
+        BLX.countdown();
     };
 
-    this.startCountdown = function () {
-        var count = 0;
-        this.countdown(count);
-    };
-
-    this.countdown = function (count) {
-        setTimeout(function (count) {
-            BLX.ui.showCountdown(count);
-            count -= 1;
-            if (count < 0) {
+    this.countdown = function () {
+        setTimeout(function () {
+            BLX.ui.showCountdown(BLX.count);
+            BLX.count -= 1;
+            if (BLX.count < 0) {
                 BLX.startLoop();
+                BLX.count = 3;
             } else {
-                BLX.countdown(count);
+                BLX.countdown();
             }
         }, 1000);
     };

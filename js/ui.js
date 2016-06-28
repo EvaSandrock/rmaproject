@@ -15,9 +15,10 @@ var UI = function () {
         this.iconLostLive = uiLiveLostIcon;
     };
 
-    this.setupAlerts = function (domGamePaused, domLevelCleared, domGameOver, countdown) {
+    this.setupAlerts = function (domGamePaused, domLevelCleared, domClearedLevel, domGameOver, countdown) {
         this.domGamePaused = domGamePaused;
         this.domLevelCleared = domLevelCleared;
+        this.domClearedLevel = domClearedLevel;
         this.domGameOver = domGameOver;
         this.domCountdown = countdown;
     };
@@ -57,8 +58,9 @@ var UI = function () {
         }
     };
 
-    this.showLevelCleared = function (show) {
+    this.showLevelCleared = function (show, level) {
         if (show) {
+            this.domClearedLevel.innerText = level + 1;
             this.domLevelCleared.removeAttribute('hidden', null);
         } else {
             this.domLevelCleared.setAttribute('hidden', 'hidden');
@@ -74,7 +76,6 @@ var UI = function () {
     };
 
     this.showCountdown = function (count) {
-        console.log(count);
         if (count === 0) {
             this.domCountdown.setAttribute('hidden', 'hidden');
         } else {

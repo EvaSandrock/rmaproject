@@ -16,11 +16,18 @@ canvas {
   margin: 0 auto; }
 
 #canvas {
+  background: -webkit-linear-gradient(#e9f4f9 0%, #cbdbe2 100%);
   background: linear-gradient(#e9f4f9 0%, #cbdbe2 100%); }
 
 .ui-bar {
   margin: 0 auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
   align-items: center;
   padding: 10px 15px;
   font-size: 58px;
@@ -33,8 +40,18 @@ canvas {
   .ui-bar__details {
     font-size: 20px;
     height: 50px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
     flex-direction: column;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
     justify-content: space-between; }
     .ui-bar__details .fa {
       margin-right: 5px; }
@@ -54,6 +71,7 @@ canvas {
   color: #dbe9ef;
   border-radius: 16px;
   left: 50%;
+  -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
   top: 240px;
   box-shadow: 1px 1px 16px -4px #263238;
@@ -80,6 +98,8 @@ canvas {
       .alert-box__footer button:hover {
         cursor: pointer;
         background-color: #c1134e; }
+      .alert-box__footer button:focus {
+        outline: none; }
 
 .pause,
 .countdown {
@@ -88,6 +108,7 @@ canvas {
   width: 50px;
   top: 340px;
   left: 50%;
+  -webkit-transform: translateX(-50%);
   transform: translateX(-50%); }
 
 .countdown {
@@ -95,7 +116,7 @@ canvas {
   font-size: 60px;
   line-height: 1;
   font-weight: 700;
-  box-shadow: 1px 1px 16px -4px #263238; }
+  text-shadow: 2px 2px 16px rgba(38, 50, 56, 0.5); }
 
 .pause::before,
 .pause::after {
@@ -115,5 +136,3 @@ canvas {
 .hints {
   margin: 0 auto;
   color: #819ca9; }
-
-/*# sourceMappingURL=style.css.map */

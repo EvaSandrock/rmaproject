@@ -58,11 +58,9 @@ var Ball = function () {
         var half = (paddleRight - paddleLeft) / 2,
             center = paddleLeft + half,
             distance = (this.nextPositionX - center);
-        this.speedX = this.speed * (distance / 20);
-        console.log('Ball: ' + this.x + ', Paddle: ' + center + ', Speed: ' + this.speedX);
-        if ((this.x < center && this.speedX > 0) || (this.x > center && this.speedX < 0)) {
+        this.speedX = this.speed * (1 + distance / 100);
+        if ((this.nextPositionX < center && this.speedX > 0) || (this.nextPositionX > center && this.speedX < 0)) {
             this.speedX *= -1;
-            console.log('Ball: ' + this.x + ', Paddle: ' + center + ', Speed: ' + this.speedX);
         }
     };
 
