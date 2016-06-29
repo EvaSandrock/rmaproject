@@ -1,20 +1,19 @@
-var Ball,
-    Paddle,
-    UI,
-    Level,
-    Collision,
-    Sound;
+/*global
+    requestAnimationFrame, cancelAnimationFrame,
+    Ball, Paddle, UI, Level, Collision, Powerup, Sound
+*/
 
 var BLX = function () {
     "use strict";
 
     this.points = 0;
-    this.maxLives = 5;
+    this.initialMaxLives = 5;
+    this.maxLives = this.initialMaxLives;
     this.initialLives = 3;
     this.lives = this.initialLives;
 
     this.columns = 10;
-    this.blockHeight = 30;
+    this.blockHeight = 40;
     this.blockWidth = 40;
     this.blockMargin = 6;
     this.canvasPadding = 73;
@@ -41,6 +40,10 @@ var BLX = function () {
     this.countdownInterval = null;
 
     this.sound = new Sound();
+
+    this.initialPointsForNextPowerup = [500, 250, 100, 50, 25];
+    this.pointsForNextPowerup = this.initialPointsForNextPowerup;
+    this.nextPowerupAt = this.pointsForNextPowerup[this.pointsForNextPowerup.length - 1];
 
     return this;
 };
@@ -82,28 +85,40 @@ var BLX = function () {
 
         this.ball.init(
             this.ballRadius,
-            this.level.levelList[this.level.currentLevel].ballSpeed,
+            this.getBallSpeed(),
             this.canvasHeight - this.paddleHeight,
             this.canvasWidth,
             this.collision
         );
 
         this.paddle.init(
-            this.level.levelList[this.level.currentLevel].paddleWidth,
+            BLX.getPaddleWidth(),
             this.paddleHeight,
-            this.canvasWidth / 2 - this.level.levelList[this.level.currentLevel].paddleWidth / 2,
+            this.getPaddleX(),
             this.canvasHeight - this.paddleHeight,
             this.paddleSpeed
         );
 
         this.collision.init(
             this.canvasWidth - this.ball.radius,
-            this.canvasHeight, // - this.paddle.height,
+            this.canvasHeight,
             this.paddle,
             this.level,
             this.ball,
             this.sound
         );
+    };
+
+    this.getBallSpeed = function () {
+        return this.level.levelList[this.level.currentLevel].ballSpeed;
+    };
+
+    this.getPaddleWidth = function () {
+        return this.level.levelList[this.level.currentLevel].paddleWidth;
+    };
+
+    this.getPaddleX = function () {
+        return this.canvasWidth / 2 - this.level.levelList[this.level.currentLevel].paddleWidth / 2;
     };
 
 }.call(BLX.prototype));
@@ -150,10 +165,12 @@ var BLX = function () {
 
         BLX.lastLoop = thisLoop;
         // console.log('Fps: ' + Math.round(60 / BLX.ball.frameSpeed));
+
+        BLX.checkPowerup();
+
         BLX.paintCanvas();
         BLX.paddle.updatePosition(BLX.canvasWidth);
         BLX.ball.startNextMove(BLX.paddle);
-
         BLX.collision.iterateBlocksForCollisionCheck();
 
         if (BLX.collision.checkDroppedBall()) {
@@ -165,6 +182,11 @@ var BLX = function () {
 
         if (BLX.ball.pointsForOneMove !== 0) {
             BLX.points += BLX.ball.pointsForOneMove;
+            BLX.uiHasChanged = true;
+        }
+
+        if (BLX.ball.bonusLifeForOneMove !== 0) {
+            BLX.addBonusLife(BLX.ball.bonusLifeForOneMove);
             BLX.uiHasChanged = true;
         }
 
@@ -264,7 +286,6 @@ var BLX = function () {
     this.gameOver = function () {
         BLX.isGameActive = false;
         BLX.ui.showGameOver(true);
-        BLX.level.currentLevel = 0;
     };
 
     this.levelCleared = function () {
@@ -274,11 +295,19 @@ var BLX = function () {
 
     this.goToNextLevel = function () {
         BLX.level.currentLevel += 1;
-        if (BLX.level.currentLevel < BLX.level.levelList.length - 1) {
-            BLX.startLevel();
-        } else {
+        if (BLX.level.currentLevel > BLX.level.levelList.length - 1) {
             BLX.level.currentLevel = 0;
         }
+        BLX.startLevel();
+    };
+
+    this.newGame = function () {
+        BLX.level.currentLevel = 0;
+        BLX.lives = BLX.initialLives;
+        BLX.maxLives = BLX.initialMaxLives;
+        BLX.pointsForNextPowerup = BLX.initialPointsForNextPowerup;
+        BLX.points = 0;
+        BLX.startLevel();
     };
 
     this.startLevel = function () {
@@ -311,4 +340,82 @@ var BLX = function () {
     };
 
 }.call(BLX.prototype));
+
+// POWERUP
+(function () {
+    "use strict";
+
+    this.checkPowerup = function () {
+        if (this.enoughPointsForPowerup() && BLX.level.blocksInLevel > 0) {
+            BLX.applyPowerupToBlock();
+            BLX.setNextPointsForPowerup();
+        }
+    };
+
+    this.setNextPointsForPowerup = function () {
+        if (BLX.pointsForNextPowerup.length > 1) {
+            BLX.pointsForNextPowerup.pop();
+        } else {
+            BLX.pointsForNextPowerup[0] += BLX.initialPointsForNextPowerup[0];
+        }
+    };
+
+    this.enoughPointsForPowerup = function () {
+        return BLX.points >= BLX.pointsForNextPowerup[BLX.pointsForNextPowerup.length - 1];
+    };
+
+    this.applyPowerupToBlock = function () {
+        var targetBlock = BLX.chooseRandomActiveBlock();
+        targetBlock.isInPowerupMode = true;
+        targetBlock.appliedPowerup = new Powerup(targetBlock, BLX.ball);
+    };
+
+    this.chooseRandomActiveBlock = function () {
+        var block,
+            row,
+            col,
+            maxRow = BLX.level.blocks.length - 1,
+            maxCol = BLX.level.blocks[0].length - 1,
+            startRow = BLX.getRandomNumber(maxRow),
+            startCol = BLX.getRandomNumber(maxCol);
+
+        console.log('startRow: ' + startRow + ', startCol: ' + startCol);
+        for (row = startRow; true; row += 0) {
+            for (col = startCol; true; row += 0) {
+                block = BLX.level.blocks[row][col];
+                if (block.isAlive() && !block.isInPowerupMode) {
+                    return block;
+                }
+                col += 1;
+                col = col % maxCol;
+                if (col === startCol) {
+                    break;
+                };
+            }
+            row += 1;
+            row = row % maxRow;
+            console.log('row: ' + row + ', col: ' + col);
+        }
+
+        return BLX.level.blocks[row][col];
+    };
+
+    this.getRandomNumber = function (max) {
+        return Math.floor(Math.random() * max);
+    };
+
+    this.addBonusLife = function (lives) {
+        BLX.lives += lives;
+        var n;
+        for (n = 0; n < lives; n += 1) {
+            BLX.lives += 1;
+            if (BLX.lives > BLX.maxLives) {
+                BLX.maxLives += 1;
+            }
+        };
+    };
+
+}.call(BLX.prototype));
+
+
 

@@ -43,7 +43,7 @@ var Levels = function () {
         },
         {
             // Level 4
-            rows: 6,
+            rows: 5,
             durabilities: [
                 20,
                 40,
@@ -56,7 +56,7 @@ var Levels = function () {
         },
         {
             // Level 5
-            rows: 7,
+            rows: 6,
             durabilities: [
                 10,
                 30,
@@ -69,7 +69,7 @@ var Levels = function () {
         },
         {
             // Level 6
-            rows: 8,
+            rows: 6,
             durabilities: [
                 10,
                 20,
@@ -82,7 +82,7 @@ var Levels = function () {
         },
         {
             // Level 7
-            rows: 9,
+            rows: 7,
             durabilities: [
                 10,
                 20,
@@ -95,7 +95,7 @@ var Levels = function () {
         },
         {
             // Level 8
-            rows: 10,
+            rows: 7,
             durabilities: [
                 10,
                 20,
@@ -103,12 +103,12 @@ var Levels = function () {
                 50,
                 80
             ],
-            ballSpeed: 4,
+            ballSpeed: 5,
             paddleWidth: 80
         },
         {
             // Level 9
-            rows: 11,
+            rows: 8,
             durabilities: [
                 10,
                 30,
@@ -116,12 +116,12 @@ var Levels = function () {
                 70,
                 90
             ],
-            ballSpeed: 4,
+            ballSpeed: 6,
             paddleWidth: 75
         },
         {
             // Level 10
-            rows: 12,
+            rows: 9,
             durabilities: [
                 40,
                 60,
@@ -129,10 +129,8 @@ var Levels = function () {
                 90,
                 100
             ],
-            ballSpeed: 4,
+            ballSpeed: 5,
             paddleWidth: 60
         }
-
     ];
-
 };

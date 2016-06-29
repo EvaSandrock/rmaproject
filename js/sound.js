@@ -1,4 +1,4 @@
-var Audio;
+/*global Audio */
 
 var Sound = function () {
     "use strict";
@@ -13,6 +13,7 @@ var Sound = function () {
 
     this.paddleSound = new Audio('audio/poka02.mp3');
     this.droppedBallSound = new Audio('audio/powerdown07.mp3');
+    this.bonusSound = new Audio('audio/by_chance.mp3');
 
     this.blocksounds = [
         [
@@ -72,6 +73,10 @@ var Sound = function () {
         this.droppedBallSound.play();
     };
 
+    this.playBonusSound = function () {
+        this.bonusSound.play();
+    };
+
     this.playBlockSound = function (blockDuration) {
         this.blocksounds[blockDuration][this.num].play();
         this.increaseNum();
@@ -81,7 +86,5 @@ var Sound = function () {
         this.num += 1;
         this.num = this.num % 5;
     };
-
-
 
 }.call(Sound.prototype));

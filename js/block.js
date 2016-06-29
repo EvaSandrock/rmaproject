@@ -7,6 +7,7 @@ var Block = function (x, y, width, height, durability) {
     this.height = height;
     this.durability = durability;
     this.pointsForBlock = (this.durability + 1) * (this.durability + 1);
+    this.isInPowerupMode = false;
 
     return this;
 };
@@ -23,11 +24,16 @@ var Block = function (x, y, width, height, durability) {
     ];
 
     this.draw = function (ctx) {
-        ctx.beginPath();
-        ctx.rect(this.x, this.y, this.width, this.height);
-        ctx.fillStyle = this.colors[this.durability];
-        ctx.fill();
-        ctx.closePath();
+
+        if (this.isInPowerupMode) {
+            this.appliedPowerup.draw(ctx);
+        } else {
+            ctx.beginPath();
+            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.fillStyle = this.colors[this.durability];
+            ctx.fill();
+            ctx.closePath();
+        }
     };
 
     this.isAlive = function () {

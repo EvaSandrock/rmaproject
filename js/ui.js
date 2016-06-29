@@ -1,7 +1,7 @@
 var UI = function () {
     "use strict";
+    // TODO: hide mouse over canvas in active game
     return this;
-
 };
 
 (function () {
@@ -76,15 +76,6 @@ var UI = function () {
             this.domCountdown.removeAttribute('hidden', null);
         }
     };
-
-    /*
-    this.clearNode = function (parentNode) {
-        while (parentNode.firstChild) {
-            parentNode.removeChild(parentNode.firstChild);
-        }
-    };
-    */
-
 
 }.call(UI.prototype));
 

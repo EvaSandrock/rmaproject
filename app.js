@@ -30,9 +30,7 @@ function nextLevel(e) {
 
 function newGame(e) {
     "use strict";
-    BLX.lives = BLX.initialLives;
-    BLX.points = 0;
-    BLX.startLevel();
+    BLX.newGame();
 }
 
 window.addEventListener('keydown', BLX.keyDownHandler, false);

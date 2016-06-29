@@ -1,10 +1,9 @@
-var Block,
-    Levels;
+/*global Block, Levels */
 
 var Level = function () {
     "use strict";
 
-    this.currentLevel = 8;
+    this.currentLevel = 0;
     this.levelList = new Levels();
     this.blocksInLevel = 0;
 
@@ -92,6 +91,5 @@ var Level = function () {
     this.getBlockY = function (row) {
         return this.canvasPadding / 2 + this.blockMargin + row * (this.blockHeight + this.blockMargin);
     };
-
 
 }.call(Level.prototype));
