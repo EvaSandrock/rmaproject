@@ -1,9 +1,7 @@
-var Ball,
-    Paddle,
-    UI,
-    Level,
-    Collision,
-    Sound;
+/*global
+    requestAnimationFrame, cancelAnimationFrame,
+    Ball, Paddle, UI, Level, Collision, Powerup, Sound
+*/
 
 var BLX = function () {
     "use strict";
@@ -14,7 +12,7 @@ var BLX = function () {
     this.lives = this.initialLives;
 
     this.columns = 10;
-    this.blockHeight = 30;
+    this.blockHeight = 40;
     this.blockWidth = 40;
     this.blockMargin = 6;
     this.canvasPadding = 73;
@@ -41,6 +39,10 @@ var BLX = function () {
     this.countdownInterval = null;
 
     this.sound = new Sound();
+
+    this.initialPointsForNextPowerup = [500, 250, 100, 50, 25];
+    this.pointsForNextPowerup = this.initialPointsForNextPowerup;
+    this.nextPowerupAt = this.pointsForNextPowerup[0];
 
     return this;
 };
@@ -79,6 +81,7 @@ var BLX = function () {
         );
 
         this.level.setupBlocks();
+        this.powerup = new Powerup(this.level.blocks[0][0]);
 
         this.ball.init(
             this.ballRadius,
@@ -121,6 +124,9 @@ var BLX = function () {
         BLX.level.drawBlocks(BLX.ctx);
         BLX.ball.draw(BLX.ctx);
         BLX.paddle.draw(BLX.ctx);
+        if (BLX.powerup.timer > 0) {
+            BLX.powerup.draw(BLX.ctx, BLX.ball.frameSpeed);
+        }
     };
 
     this.updateUI = function () {
@@ -150,10 +156,12 @@ var BLX = function () {
 
         BLX.lastLoop = thisLoop;
         // console.log('Fps: ' + Math.round(60 / BLX.ball.frameSpeed));
+
+        BLX.checkPowerup();
+
         BLX.paintCanvas();
         BLX.paddle.updatePosition(BLX.canvasWidth);
         BLX.ball.startNextMove(BLX.paddle);
-
         BLX.collision.iterateBlocksForCollisionCheck();
 
         if (BLX.collision.checkDroppedBall()) {
@@ -264,7 +272,6 @@ var BLX = function () {
     this.gameOver = function () {
         BLX.isGameActive = false;
         BLX.ui.showGameOver(true);
-        BLX.level.currentLevel = 0;
     };
 
     this.levelCleared = function () {
@@ -274,11 +281,18 @@ var BLX = function () {
 
     this.goToNextLevel = function () {
         BLX.level.currentLevel += 1;
-        if (BLX.level.currentLevel < BLX.level.levelList.length - 1) {
-            BLX.startLevel();
-        } else {
+        if (BLX.level.currentLevel > BLX.level.levelList.length - 1) {
             BLX.level.currentLevel = 0;
         }
+        BLX.startLevel();
+    };
+
+    this.newGame = function () {
+        BLX.level.currentLevel = 0;
+        BLX.lives = BLX.initialLives;
+        BLX.pointsForNextPowerup = BLX.initialPointsForNextPowerup;
+        BLX.points = 0;
+        BLX.startLevel();
     };
 
     this.startLevel = function () {
@@ -311,4 +325,43 @@ var BLX = function () {
     };
 
 }.call(BLX.prototype));
+
+// POWERUP
+(function () {
+    "use strict";
+
+    this.checkPowerup = function () {
+        if (this.enoughPointsForPowerup()) {
+            BLX.applyPowerupToBlock();
+            BLX.setNextPointsForPowerup();
+        }
+    };
+
+    this.setNextPointsForPowerup = function () {
+        if (BLX.pointsForNextPowerup.length > 1) {
+            BLX.pointsForNextPowerup.pop();
+        } else {
+            BLX.pointsForNextPowerup[0] += BLX.initialPointsForNextPowerup[0];
+        }
+    };
+
+    this.enoughPointsForPowerup = function () {
+        return BLX.points >= BLX.pointsForNextPowerup[BLX.pointsForNextPowerup.length - 1];
+    };
+
+    this.applyPowerupToBlock = function () {
+        var targetBlock = BLX.chooseRandomActiveBlock();
+    };
+
+    this.chooseRandomActiveBlock = function () {
+
+    };
+
+    this.getRandomNumber = function (max) {
+        return Math.floor(Math.random() * max);
+    };
+
+}.call(BLX.prototype));
+
+
 

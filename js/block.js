@@ -7,6 +7,7 @@ var Block = function (x, y, width, height, durability) {
     this.height = height;
     this.durability = durability;
     this.pointsForBlock = (this.durability + 1) * (this.durability + 1);
+    this.isInPowerupMode = false;
 
     return this;
 };

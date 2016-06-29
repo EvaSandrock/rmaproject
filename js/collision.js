@@ -127,5 +127,4 @@ var Collision = function () {
         return false;
     };
 
-
 }.call(Collision.prototype));

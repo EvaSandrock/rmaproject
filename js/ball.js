@@ -13,7 +13,7 @@ var Ball = function () {
     };
 
     this.init = function (radius, speed, bottomEdge, rightEdge, collision) {
-
+        this.frameSpeed = 1;
         this.resetDirections();
         this.initialX = rightEdge / 2;
         this.initialY = bottomEdge - radius;
@@ -59,16 +59,16 @@ var Ball = function () {
         var half = (paddleRight - paddleLeft) / 2,
             center = paddleLeft + half,
             distance = Math.abs(this.nextPositionX - center);
-        
+
         this.speedX = (this.speed * 2) * (distance / half);
-        
+
         if (this.ballHitsPaddleLeft(center)) {
             this.xDirectionPositive = false;
         } else {
             this.xDirectionPositive = true;
         }
     };
-    
+
     this.ballHitsPaddleLeft = function (paddleCenter) {
         return this.nextPositionX < paddleCenter;
     };

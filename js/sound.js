@@ -1,4 +1,4 @@
-var Audio;
+/*global Audio */
 
 var Sound = function () {
     "use strict";
@@ -81,7 +81,5 @@ var Sound = function () {
         this.num += 1;
         this.num = this.num % 5;
     };
-
-
 
 }.call(Sound.prototype));
