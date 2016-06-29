@@ -1,7 +1,9 @@
-var Powerup = function (block) {
+var Powerup = function (block, ball) {
     "use strict";
 
     this.block = block;
+    this.ball = ball;
+    this.block.appliedPowerup = this;
     this.initialTimer = 1800;
     this.timer = this.initialTimer;
     this.timerX = this.block.x + (this.block.width / 2);
@@ -13,6 +15,7 @@ var Powerup = function (block) {
     this.imgX = this.block.x + 9;
     this.imgY = this.block.y + 10;
     this.bonus = this.setBonus();
+    this.bonusPoints = 50;
 
     return this;
 };
@@ -28,14 +31,17 @@ var Powerup = function (block) {
         }
     };
 
-    this.draw = function (ctx, frameSpeed) {
+    this.draw = function (ctx) {
         this.drawTimer(ctx);
         if (this.bonus === 'points') {
             this.drawPoints(ctx);
         } else {
             this.drawLife(ctx);
         }
-        this.timer -= frameSpeed;
+        this.timer -= this.ball.frameSpeed;
+        if (this.timer <= 0) {
+            this.removePowerupFromBlock();
+        }
     };
 
     this.drawTimer = function (ctx) {
@@ -43,7 +49,7 @@ var Powerup = function (block) {
         ctx.moveTo(this.timerX, this.timerY);
         ctx.arc(this.timerX, this.timerY, this.timerRadius, this.timerStart, this.getTimerEnd(), true);
         ctx.lineTo(this.timerX, this.timerY);
-        ctx.fillStyle = 'rgba(38, 50, 56, 0.3)';
+        ctx.fillStyle = 'rgba(38, 50, 56, 0.8)';
         ctx.fill();
         ctx.closePath();
     };
@@ -63,6 +69,11 @@ var Powerup = function (block) {
 
         this.timerEnd = (twelveOClockPoint + ((this.initialTimer * convertTimerToDeg) - (this.timer * convertTimerToDeg))) * convertToRadian;
         return this.timerEnd;
+    };
+
+    this.removePowerupFromBlock = function () {
+        this.block.appliedPowerup = null;
+        this.block.isInPowerupMode = false;
     };
 
     this.pointsImage = new Image();

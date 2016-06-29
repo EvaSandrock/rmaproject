@@ -7,7 +7,8 @@ var BLX = function () {
     "use strict";
 
     this.points = 0;
-    this.maxLives = 5;
+    this.initialMaxLives = 5;
+    this.maxLives = this.initialMaxLives;
     this.initialLives = 3;
     this.lives = this.initialLives;
 
@@ -42,7 +43,7 @@ var BLX = function () {
 
     this.initialPointsForNextPowerup = [500, 250, 100, 50, 25];
     this.pointsForNextPowerup = this.initialPointsForNextPowerup;
-    this.nextPowerupAt = this.pointsForNextPowerup[0];
+    this.nextPowerupAt = this.pointsForNextPowerup[this.pointsForNextPowerup.length - 1];
 
     return this;
 };
@@ -81,32 +82,43 @@ var BLX = function () {
         );
 
         this.level.setupBlocks();
-        this.powerup = new Powerup(this.level.blocks[0][0]);
 
         this.ball.init(
             this.ballRadius,
-            this.level.levelList[this.level.currentLevel].ballSpeed,
+            this.getBallSpeed(),
             this.canvasHeight - this.paddleHeight,
             this.canvasWidth,
             this.collision
         );
 
         this.paddle.init(
-            this.level.levelList[this.level.currentLevel].paddleWidth,
+            BLX.getPaddleWidth(),
             this.paddleHeight,
-            this.canvasWidth / 2 - this.level.levelList[this.level.currentLevel].paddleWidth / 2,
+            this.getPaddleX(),
             this.canvasHeight - this.paddleHeight,
             this.paddleSpeed
         );
 
         this.collision.init(
             this.canvasWidth - this.ball.radius,
-            this.canvasHeight, // - this.paddle.height,
+            this.canvasHeight,
             this.paddle,
             this.level,
             this.ball,
             this.sound
         );
+    };
+
+    this.getBallSpeed = function () {
+        return this.level.levelList[this.level.currentLevel].ballSpeed;
+    };
+
+    this.getPaddleWidth = function () {
+        return this.level.levelList[this.level.currentLevel].paddleWidth;
+    };
+
+    this.getPaddleX = function () {
+        return this.canvasWidth / 2 - this.level.levelList[this.level.currentLevel].paddleWidth / 2;
     };
 
 }.call(BLX.prototype));
@@ -124,9 +136,6 @@ var BLX = function () {
         BLX.level.drawBlocks(BLX.ctx);
         BLX.ball.draw(BLX.ctx);
         BLX.paddle.draw(BLX.ctx);
-        if (BLX.powerup.timer > 0) {
-            BLX.powerup.draw(BLX.ctx, BLX.ball.frameSpeed);
-        }
     };
 
     this.updateUI = function () {
@@ -173,6 +182,11 @@ var BLX = function () {
 
         if (BLX.ball.pointsForOneMove !== 0) {
             BLX.points += BLX.ball.pointsForOneMove;
+            BLX.uiHasChanged = true;
+        }
+
+        if (BLX.ball.bonusLifeForOneMove !== 0) {
+            BLX.addBonusLife(BLX.ball.bonusLifeForOneMove);
             BLX.uiHasChanged = true;
         }
 
@@ -290,6 +304,7 @@ var BLX = function () {
     this.newGame = function () {
         BLX.level.currentLevel = 0;
         BLX.lives = BLX.initialLives;
+        BLX.maxLives = BLX.initialMaxLives;
         BLX.pointsForNextPowerup = BLX.initialPointsForNextPowerup;
         BLX.points = 0;
         BLX.startLevel();
@@ -331,7 +346,7 @@ var BLX = function () {
     "use strict";
 
     this.checkPowerup = function () {
-        if (this.enoughPointsForPowerup()) {
+        if (this.enoughPointsForPowerup() && BLX.level.blocksInLevel > 0) {
             BLX.applyPowerupToBlock();
             BLX.setNextPointsForPowerup();
         }
@@ -351,14 +366,53 @@ var BLX = function () {
 
     this.applyPowerupToBlock = function () {
         var targetBlock = BLX.chooseRandomActiveBlock();
+        targetBlock.isInPowerupMode = true;
+        targetBlock.appliedPowerup = new Powerup(targetBlock, BLX.ball);
     };
 
     this.chooseRandomActiveBlock = function () {
+        var block,
+            row,
+            col,
+            maxRow = BLX.level.blocks.length - 1,
+            maxCol = BLX.level.blocks[0].length - 1,
+            startRow = BLX.getRandomNumber(maxRow),
+            startCol = BLX.getRandomNumber(maxCol);
 
+        console.log('startRow: ' + startRow + ', startCol: ' + startCol);
+        for (row = startRow; true; row += 0) {
+            for (col = startCol; true; row += 0) {
+                block = BLX.level.blocks[row][col];
+                if (block.isAlive() && !block.isInPowerupMode) {
+                    return block;
+                }
+                col += 1;
+                col = col % maxCol;
+                if (col === startCol) {
+                    break;
+                };
+            }
+            row += 1;
+            row = row % maxRow;
+            console.log('row: ' + row + ', col: ' + col);
+        }
+
+        return BLX.level.blocks[row][col];
     };
 
     this.getRandomNumber = function (max) {
         return Math.floor(Math.random() * max);
+    };
+
+    this.addBonusLife = function (lives) {
+        BLX.lives += lives;
+        var n;
+        for (n = 0; n < lives; n += 1) {
+            BLX.lives += 1;
+            if (BLX.lives > BLX.maxLives) {
+                BLX.maxLives += 1;
+            }
+        };
     };
 
 }.call(BLX.prototype));

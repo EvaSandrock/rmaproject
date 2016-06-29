@@ -1,5 +1,6 @@
 var UI = function () {
     "use strict";
+    // TODO: hide mouse over canvas in active game
     return this;
 };
 

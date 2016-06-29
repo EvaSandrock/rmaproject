@@ -25,6 +25,7 @@ var Ball = function () {
         this.bottomEdge = bottomEdge;
         this.rightEdge = rightEdge - this.radius;
         this.pointsForOneMove = 0;
+        this.bonusLifeForOneMove = 0;
         this.collisionChecker = collision;
     };
 
@@ -42,6 +43,7 @@ var Ball = function () {
 
         this.paddleCollision = false;
         this.pointsForOneMove = 0;
+        this.bonusLifeForOneMove = 0;
         this.collisionChecker.checkBorderCollision();
         this.updateNextPosition();
         this.collisionChecker.checkPaddleCollision();

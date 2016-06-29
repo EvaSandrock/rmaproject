@@ -114,17 +114,32 @@ var Collision = function () {
             blockBottom = block.y + block.height + this.ball.radius;
 
         if (
+            // TODO: fix block collision detection (vertical / horizontal)
             this.ball.nextPositionX > blockLeft &&
                 this.ball.nextPositionX < blockRight &&
                 this.ball.nextPositionY > blockTop &&
                 this.ball.nextPositionY < blockBottom
         ) {
-            this.sound.playBlockSound(block.durability);
+            if (block.isInPowerupMode) {
+                this.addPowerupBonus(block);
+                block.appliedPowerup.removePowerupFromBlock();
+                this.sound.playBonusSound();
+            } else {
+                this.sound.playBlockSound(block.durability);
+            }
             block.durability -= 1;
             return true;
         }
 
         return false;
+    };
+
+    this.addPowerupBonus = function (block) {
+        if (block.appliedPowerup.bonus === 'life') {
+            this.ball.bonusLifeForOneMove += 1;
+        } else if (block.appliedPowerup.bonus === 'points') {
+            this.ball.pointsForOneMove += block.appliedPowerup.bonusPoints;
+        }
     };
 
 }.call(Collision.prototype));

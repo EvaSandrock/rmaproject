@@ -13,6 +13,7 @@ var Sound = function () {
 
     this.paddleSound = new Audio('audio/poka02.mp3');
     this.droppedBallSound = new Audio('audio/powerdown07.mp3');
+    this.bonusSound = new Audio('audio/by_chance.mp3');
 
     this.blocksounds = [
         [
@@ -70,6 +71,10 @@ var Sound = function () {
 
     this.playDroppedBallSound = function () {
         this.droppedBallSound.play();
+    };
+
+    this.playBonusSound = function () {
+        this.bonusSound.play();
     };
 
     this.playBlockSound = function (blockDuration) {
