@@ -8,9 +8,6 @@
 body {
   font-family: "Roboto Slab", serif; }
 
-*[hidden] {
-  display: none !important; }
-
 canvas {
   display: block;
   margin: 0 auto; }
@@ -132,5 +129,11 @@ canvas {
     border-bottom: 1px dotted currentColor; }
     .hints a:hover {
       border-bottom-color: transparent; }
+
+.hideMouse:hover {
+  cursor: none; }
+
+*[hidden] {
+  display: none !important; }
 
 /*# sourceMappingURL=style.css.map */

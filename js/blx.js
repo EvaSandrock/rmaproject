@@ -68,7 +68,13 @@ var BLX = function () {
     };
 
     this.setupUI = function () {
-        BLX.updateUI();
+        BLX.ui.setup(
+            BLX.canvasObject,
+            BLX.level.currentLevel,
+            BLX.points,
+            BLX.lives,
+            BLX.maxLives
+        );
     };
 
     this.setupObjects = function () {
