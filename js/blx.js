@@ -341,6 +341,7 @@ var BLX = function () {
             BLX.startLoop();
             return;
         } else {
+            BLX.sound.playCountdownSound();
             BLX.count -= 1;
         }
     };
@@ -385,9 +386,8 @@ var BLX = function () {
             startRow = BLX.getRandomNumber(maxRow),
             startCol = BLX.getRandomNumber(maxCol);
 
-        console.log('startRow: ' + startRow + ', startCol: ' + startCol);
         for (row = startRow; true; row += 0) {
-            for (col = startCol; true; row += 0) {
+            for (col = startCol; true; col += 0) {
                 block = BLX.level.blocks[row][col];
                 if (block.isAlive() && !block.isInPowerupMode) {
                     return block;
@@ -396,11 +396,10 @@ var BLX = function () {
                 col = col % maxCol;
                 if (col === startCol) {
                     break;
-                };
+                }
             }
             row += 1;
             row = row % maxRow;
-            console.log('row: ' + row + ', col: ' + col);
         }
 
         return BLX.level.blocks[row][col];
@@ -418,7 +417,7 @@ var BLX = function () {
             if (BLX.lives > BLX.maxLives) {
                 BLX.maxLives += 1;
             }
-        };
+        }
     };
 
 }.call(BLX.prototype));

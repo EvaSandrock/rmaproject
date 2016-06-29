@@ -84,7 +84,6 @@ canvas {
 .countdown {
   position: absolute;
   display: block;
-  width: 50px;
   top: 340px;
   left: 50%;
   transform: translateX(-50%); }
@@ -94,7 +93,15 @@ canvas {
   font-size: 60px;
   line-height: 1;
   font-weight: 700;
-  text-shadow: 2px 2px 16px rgba(38, 50, 56, 0.5); }
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 1px 1px 16px -4px #263238; }
+
+.pause {
+  width: 50px; }
 
 .pause::before,
 .pause::after {

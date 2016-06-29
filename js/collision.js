@@ -90,6 +90,10 @@ var Collision = function () {
             col,
             block;
 
+        if (this.ballIsBelowBottomRow()) {
+            return;
+        }
+
         for (row = 0; row < rows; row += 1) {
             for (col = 0; col < columns; col += 1) {
 
@@ -98,12 +102,25 @@ var Collision = function () {
                     if (!block.isAlive()) {
                         this.ball.pointsForOneMove += block.pointsForBlock;
                     }
-                    this.ball.yDirectionPositive ^= true;
+                    if (this.collisionH) {
+                        this.ball.yDirectionPositive ^= true;
+                    } else if (this.collisionV) {
+                        this.ball.xDirectionPositive ^= true;
+                    }
+
                     this.ball.updateNextPosition();
                 }
-
+                this.collisionV = false;
+                this.collisionH = false;
             }
         }
+    };
+
+    this.ballIsBelowBottomRow = function () {
+        var blockInLastRow = this.level.blocks[this.level.blocks.length - 1][0],
+            bottomRow = blockInLastRow.y + blockInLastRow.height;
+
+        return this.ball.nextPositionY - this.ball.radius > bottomRow;
     };
 
     this.checkBlockCollision = function (block) {
@@ -113,13 +130,21 @@ var Collision = function () {
             blockTop = block.y - this.ball.radius,
             blockBottom = block.y + block.height + this.ball.radius;
 
+        this.collisionV = false;
+        this.collisionH = false;
+
         if (
-            // TODO: fix block collision detection (vertical / horizontal)
             this.ball.nextPositionX > blockLeft &&
                 this.ball.nextPositionX < blockRight &&
                 this.ball.nextPositionY > blockTop &&
                 this.ball.nextPositionY < blockBottom
         ) {
+            if (this.blockCollidedWithVerticalEdges(blockLeft, blockRight)) {
+                this.collisionV = true;
+            } else if (this.blockCollidedWithHorizontalEdges(blockTop, blockBottom)) {
+                this.collisionH = true;
+            }
+
             if (block.isInPowerupMode) {
                 this.addPowerupBonus(block);
                 block.appliedPowerup.removePowerupFromBlock();
@@ -132,6 +157,32 @@ var Collision = function () {
         }
 
         return false;
+    };
+
+    this.blockCollidedWithVerticalEdges = function (blockLeft, blockRight) {
+        var collisionV = false;
+
+        if (this.ball.x < blockLeft && this.ball.nextPositionX > blockLeft) {
+            collisionV = true;
+        }
+        if (this.ball.x > blockRight && this.ball.nextPositionX < blockRight) {
+            collisionV = true;
+        }
+
+        return collisionV;
+    };
+
+    this.blockCollidedWithHorizontalEdges = function (blockTop, blockBottom) {
+        var collisionH = false;
+
+        if (this.ball.y < blockTop && this.ball.nextPositionY > blockTop) {
+            collisionH = true;
+        }
+        if (this.ball.y > blockBottom && this.ball.nextPositionY < blockBottom) {
+            collisionH = true;
+        }
+
+        return collisionH;
     };
 
     this.addPowerupBonus = function (block) {
