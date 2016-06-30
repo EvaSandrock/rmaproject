@@ -21,7 +21,7 @@ var Collision = function () {
 
     this.checkDroppedBall = function () {
 
-        if (this.ballHitsBottomEdge() && !this.ball.paddleCollision) {
+        if (this.ballHitsBottomEdge() && !this.ballHitsPaddle()) {
             this.sound.playDroppedBallSound();
             return true;
         }
@@ -68,11 +68,11 @@ var Collision = function () {
     };
 
     this.getPaddleLeftEdge = function () {
-        return this.paddle.x - this.ball.radius * 0.3;
+        return this.paddle.x - this.ball.radius * 0.5;
     };
 
     this.getPaddleRightEdge = function () {
-        return this.paddle.x + this.paddle.width + this.ball.radius * 0.3;
+        return this.paddle.x + this.paddle.width + this.ball.radius * 0.5;
     };
 
     this.turnBallAround = function () {

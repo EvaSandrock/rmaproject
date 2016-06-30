@@ -35,7 +35,6 @@ function newGame(e) {
 
 window.addEventListener('keydown', BLX.keyDownHandler, false);
 window.addEventListener('keyup', BLX.keyUpHandler, false);
-window.addEventListener('keypress', BLX.keyPressHandler, false);
 window.addEventListener('mousemove', BLX.mouseMoveHandler, false);
 
 BLX.paintCanvas();
