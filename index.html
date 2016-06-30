@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Canvas Block Breaker</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="js/ball.js" ></script>
+    <script src="js/block.js" ></script>
+    <script src="js/level.js" ></script>
+    <script src="js/levels.js" ></script>
+    <script src="js/paddle.js" ></script>
+    <script src="js/ui.js" ></script>
+    <script src="js/collision.js" ></script>
+    <script src="js/powerup.js" ></script>
+    <script src="js/sound.js" ></script>
+    <script src="js/blx.js" ></script>
+</head>
+<body>
+    <div class="pause" id="gamePaused" hidden ></div>
+    <div class="countdown" id="countdown" hidden >3</div>
+    <div class="alert-box" id="levelCleared" hidden >
+        <div class="alert-box__header">Congratulations!</div>
+        <div class="alert-box__body">Level <span id="clearedLevel">1</span> cleared</div>
+        <div class="alert-box__footer"><button id="continue" onclick="nextLevel()">Continue</button></div>
+    </div>
+    <div class="alert-box" id="gameOver" hidden >
+        <div class="alert-box__header">Sorry!</div>
+        <div class="alert-box__body">Game over<br>no lives left.</div>
+        <div class="alert-box__footer"><button id="newGame" onclick="newGame()">New game</button></div>
+    </div>
+    <div class="ui-bar" style="width: 600px; height: 80px;">
+        <div class="ui-bar__title">
+            BLOX
+        </div>
+        <div class="ui-bar__details">
+            <div class="ui-bar__lives" id="lives">
+                <i class="fa fa-heart"></i>
+                <i class="fa fa-heart"></i>
+                <i class="fa fa-heart-o"></i>
+            </div>
+            <div class="ui-bar__points">
+                <i class="fa fa-diamond"></i><span id="points">34528</span>
+            </div>
+        </div>
+        <div class="ui-bar__level" id="level">3</div>
+    </div>
+    <canvas id="canvas" width="600" height="600" class="hideMouse" >
+    </canvas>
+    <div class="hints" style="width: 600px;">
+        <ul>
+            <li>
+                &copy; 2016 &ndash;
+                <a href="https://github.com/EvaSandrock/rmaproject" target="_blank">
+                    Eva Sandrock
+                </a>
+                 / 7001512
+            </li>
+            <li>
+                Sounds:
+                <a href="http://taira-komori.jpn.org/freesounden.html" target="_blank">
+                    Taira Komori's Japanese Free Sound Effects
+                </a>
+            </li>
+            <li>Tested in Google Chrome</li>
+            <li>Press space to pause game</li>
+        </ul>
+    </div>
+    <script src="app.js" ></script>
+</body>
+</html>

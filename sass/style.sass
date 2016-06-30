@@ -1,0 +1,168 @@
+$color-blue: #03A9F4
+$color-pink: #E91E63
+$color-dark: #263238
+$color-light: #dbe9ef
+$color-orange: #F57F17
+$box-shadow: 1px 1px 16px -4px $color-dark
+
+
+*,
+*::after,
+*::before
+    margin: 0
+    padding: 0
+    box-sizing: border-box
+
+body
+    font-family: 'Roboto Slab', serif
+
+canvas
+    display: block
+    margin: 0 auto
+
+#canvas
+    background: linear-gradient(#e9f4f9 0%, #cbdbe2 100%)
+
+
+.ui-bar
+    margin: 0 auto
+    display: flex
+    align-items: center
+    padding: 10px 15px
+    font-size: 58px
+    line-height: 1
+    color: $color-blue
+    background: $color-dark
+    font-weight: 700
+
+    &__title
+        margin-right: auto
+
+    &__details
+        font-size: 20px
+        height: 50px
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+
+        .fa
+            margin-right: 5px
+
+    &__points
+        color: $color-orange
+        font-weight: normal
+
+    &__lives
+        color: $color-pink
+
+    &__level
+        margin-left: 30px
+
+.alert-box
+    position: absolute
+    min-width: 220px
+    padding: 10px
+    background: $color-dark
+    color: $color-light
+    border-radius: 16px
+    left: 50%
+    transform: translateX(-50%)
+    top: 240px
+    box-shadow: $box-shadow
+    font-size: 24px
+    text-align: center
+    border: 5px solid $color-pink
+
+    &__header
+        font-size: 30px
+        margin: 0 10px
+
+    &__body
+        margin: 20px 10px
+
+    &__footer
+        text-align: right
+
+        button
+            font: inherit
+            padding: 4px 12px
+            border: none
+            border-radius: 6px
+            font-size: 18px
+            text-transform: uppercase
+            background-color: $color-pink
+            color: white
+            letter-spacing: 1px
+
+            &:hover
+                cursor: pointer
+                background-color: darken($color-pink, 10%)
+            &:focus
+                outline: none
+
+.pause,
+.countdown
+    position: absolute
+    display: block
+    top: 340px
+    left: 50%
+    transform: translateX(-50%)
+
+.countdown
+    color: $color-pink
+    font-size: 60px
+    line-height: 1
+    font-weight: 700
+    width: 65px
+    height: 65px
+    border-radius: 50%
+    text-align: center
+    background: rgba(255, 255, 255, 0.6)
+    box-shadow: $box-shadow
+
+.pause
+    width: 50px
+
+.pause::before,
+.pause::after
+    content: ""
+    display: block
+    width: 20px
+    height: 50px
+    background: $color-pink
+    box-shadow: $box-shadow
+
+.pause::before
+    float: left
+.pause::after
+    float: right
+
+.hints
+    margin: 10px auto 0
+    color: lighten($color-dark, 50%)
+    font-size: 12px
+
+    ul
+        margin: 0 0 0 5px
+        padding: 0
+        list-style-type: circle
+        list-style-position: inside
+    li
+        margin-bottom: 5px
+    a
+        color: inherit
+        text-decoration: none
+        display: inline-block
+        border-bottom: 1px dotted currentColor
+        &:hover
+            border-bottom-color: transparent
+
+.hideMouse
+    &:hover
+        cursor: none
+
+*[hidden]
+    display: none !important
+
+
+
